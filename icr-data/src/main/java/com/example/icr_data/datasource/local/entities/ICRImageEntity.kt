@@ -13,7 +13,6 @@ import androidx.room.PrimaryKey
         childColumns = ["userId"]
     )],
     indices = [androidx.room.Index("userId", unique = true)],
-    primaryKeys = ["id", "userId"],
 )
 data class ICRImageEntity(
     @PrimaryKey(autoGenerate = true)
