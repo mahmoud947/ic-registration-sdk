@@ -3,14 +3,15 @@ package com.example.icr_ui.screen
 import android.util.Log
 import com.example.icr_core.base.ICRViewModel
 import com.example.icr_core.base.Resource
+import com.example.icr_core.base.ShowToast
 import com.example.icr_domain.models.ICRUser
 import com.example.icr_domain.usecases.auth.RegisterNewUserUseCase
 import com.example.icr_domain.usecases.validation.FormValidationUseCase
 import com.example.icr_domain.usecases.validation.ValidateConfirmPasswordUseCaseIN
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.flowOn
+import com.example.icr_ui.R
 
 private const val TAG = "TestScreenViewModel"
 
@@ -33,30 +34,37 @@ class RegistrationViewModel(
 
 
     private fun insertNewUser() = launchCoroutine(Dispatchers.IO) {
-//        insertNewUserUseCase(
-//            input = ICRUser(
-//                phoneNumber = "012312321321",
-//                email = "email.com",
-//                password = "123123",
-//                username = "mahmoud"
-//            )
-//        ).flowOn(Dispatchers.IO)
-//            .collectLatest { resource ->
-//                when (resource) {
-//                    is Resource.Error -> {
-//                        Log.d(TAG, "insertNewUser: ${resource.exception.message}")
-//                    }
-//
-//                    Resource.Loading -> {
-//                        Log.d(TAG, "insertNewUser: Loading")
-//                    }
-//
-//                    is Resource.Success -> {
-//                        Log.d(TAG, "insertNewUser: ${resource.data}")
-//                    }
-//                }
-//            }
-        isValidForm()
+
+        if (isValidForm()) {
+            insertNewUserUseCase(
+                input = ICRUser(
+                    phoneNumber = viewState.value.phoneNumber,
+                    email = viewState.value.email,
+                    password = viewState.value.password,
+                    username = viewState.value.username
+                )
+            ).flowOn(Dispatchers.IO)
+                .collectLatest { resource ->
+                    when (resource) {
+                        is Resource.Error -> {
+                            setState { copy(loading = false) }
+                        }
+
+                        Resource.Loading -> {
+                            setState { copy(loading = true) }
+                        }
+
+                        is Resource.Success -> {
+                            setState { copy(loading = false) }
+                            setEffect {
+                                ShowToast(
+                                    message = R.string.successfully,
+                                )
+                            }
+                        }
+                    }
+                }
+        }
     }
 
     private fun isValidForm(): Boolean {
@@ -65,10 +73,12 @@ class RegistrationViewModel(
         val emailRes = formValidationUseCase.validateEmail(viewState.value.email)
         val passwordRes = formValidationUseCase.validatePassword(viewState.value.password)
         val confirmPasswordRes =
-            formValidationUseCase.validateConfirmPassword(ValidateConfirmPasswordUseCaseIN(
-                password = viewState.value.password,
-                confirmPassword = viewState.value.confirmPassword
-            ))
+            formValidationUseCase.validateConfirmPassword(
+                ValidateConfirmPasswordUseCaseIN(
+                    password = viewState.value.password,
+                    confirmPassword = viewState.value.confirmPassword
+                )
+            )
         val hasError = listOf(
             usernameRes,
             phoneNumberRes,
@@ -89,7 +99,7 @@ class RegistrationViewModel(
                 )
             }
             return false
-        }else{
+        } else {
             setState {
                 copy(
                     usernameResErrorId = null,

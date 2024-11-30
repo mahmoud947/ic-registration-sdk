@@ -1,5 +1,6 @@
 package com.example.icr_ui.screen
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -13,12 +14,15 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.example.icr_core.base.OnEffect
+import com.example.icr_core.base.ShowToast
 import com.example.icr_core.base.ViewSideEffect
 import com.example.icr_core.utils.Margin
 import com.example.icr_ui.components.ICRFlatButton
@@ -40,6 +44,14 @@ fun RegistrationScreen(
     sideEffect: Flow<ViewSideEffect> = emptyFlow(),
     navController: NavController = rememberNavController()
 ) {
+    val context = LocalContext.current
+    sideEffect.OnEffect { effect ->
+        when (effect) {
+            is ShowToast -> {
+                Toast.makeText(context, effect.message, Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
     Scaffold { innerPadding ->
         Column(
             modifier = modifier
