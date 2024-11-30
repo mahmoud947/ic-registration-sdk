@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <bytecodeTargetLevel>
+      <module name="ic-registration-sdk.ic-registration-core" target="21" />
+      <module name="ic-registration-sdk.ic-registration-data" target="21" />
+      <module name="ic-registration-sdk.ic-registration-domain" target="21" />
+      <module name="ic-registration-sdk.ic-registration-presentation" target="21" />
+      <module name="ic-registration-sdk.ic-registration-sdk" target="21" />
+    </bytecodeTargetLevel>
+  </component>
+</project>
