@@ -2,6 +2,6 @@ package com.example.icr_core.facedetector
 
 import android.graphics.Bitmap
 
-interface FaceDetector {
+interface ICRFaceDetector {
     fun detectFace(bitmap: Bitmap, callback: (Float?) -> Unit)
 }
