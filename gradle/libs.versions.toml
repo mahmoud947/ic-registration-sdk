@@ -1,5 +1,9 @@
 [versions]
 agp = "8.7.2"
+cameraCore = "1.5.0"
+cameraCoreVersion = "1.5.0-alpha03"
+cameraLifecycle = "1.5.0-alpha03"
+cameraView = "1.5.0-alpha03"
 faceDetection = "16.1.7"
 koinAndroid = "3.5.6"
 koinAndroidxCompose = "3.5.0"
@@ -20,6 +24,16 @@ navigationCompose = "2.8.0-rc01"
 
 
 [libraries]
+androidx-camera-camera2 = { module = "androidx.camera:camera-camera2", version.ref = "cameraCoreVersion" }
+androidx-camera-core = { module = "androidx.camera:camera-core", version.ref = "cameraCore" }
+androidx-camera-core-v150alpha03 = { module = "androidx.camera:camera-core", version.ref = "cameraCoreVersion" }
+androidx-camera-extensions = { module = "androidx.camera:camera-extensions", version.ref = "cameraCoreVersion" }
+androidx-camera-lifecycle = { module = "androidx.camera:camera-lifecycle", version.ref = "cameraCore" }
+androidx-camera-lifecycle-v150alpha03 = { module = "androidx.camera:camera-lifecycle", version.ref = "cameraLifecycle" }
+androidx-camera-mlkit-vision = { module = "androidx.camera:camera-mlkit-vision", version.ref = "cameraCoreVersion" }
+androidx-camera-video = { module = "androidx.camera:camera-video", version.ref = "cameraCoreVersion" }
+androidx-camera-view = { module = "androidx.camera:camera-view", version.ref = "cameraCore" }
+androidx-camera-view-v150alpha03 = { module = "androidx.camera:camera-view", version.ref = "cameraView" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 face-detection = { module = "com.google.mlkit:face-detection", version.ref = "faceDetection" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }

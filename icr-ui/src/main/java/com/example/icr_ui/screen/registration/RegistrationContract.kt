@@ -1,4 +1,4 @@
-package com.example.icr_ui.screen
+package com.example.icr_ui.screen.registration
 
 import com.example.icr_core.base.ViewEvent
 import com.example.icr_core.base.ViewSideEffect

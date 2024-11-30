@@ -7,7 +7,6 @@ import androidx.activity.enableEdgeToEdge
 import androidx.navigation.compose.rememberNavController
 import com.example.icr_ui.navigation.ICRNavHost
 import com.example.icr_ui.theme.IcregistrationsdkTheme
-import com.example.icr_ui.screen.RegistrationScreen
 
 class ICRActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -9,8 +9,8 @@ fun ICRNavHost(navController: NavHostController) {
     NavHost(
         navController = navController,
         route = RootGraph.Root,
-        startDestination = RootGraph.Auth,
+        startDestination = RootGraph.Main,
     ) {
-        authNavGraph(navController = navController)
+        mainNavGraph(navController = navController)
     }
 }

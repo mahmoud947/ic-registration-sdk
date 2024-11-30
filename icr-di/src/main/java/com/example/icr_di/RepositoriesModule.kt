@@ -1,11 +1,14 @@
 package com.example.icr_di
 
 import com.example.icr_data.repositories.AuthRepositoryImpl
+import com.example.icr_data.repositories.FaceDetectionRepositoryImpl
 import com.example.icr_domain.repositories.AuthRepository
+import com.example.icr_domain.repositories.FaceDetectionRepository
 import org.koin.dsl.bind
 import org.koin.dsl.module
 
 
 val repositoryModule = module {
-    single<AuthRepository> { AuthRepositoryImpl(get()) }
+    factory<AuthRepository> { AuthRepositoryImpl(get()) }
+    factory<FaceDetectionRepository> { FaceDetectionRepositoryImpl(get()) }
 }

@@ -63,4 +63,13 @@ dependencies {
     implementation(libs.koin.core)
     implementation(libs.koin.androidx.compose)
     debugImplementation(libs.ui.tooling)
+
+    implementation(libs.androidx.camera.core.v150alpha03)
+    implementation(libs.androidx.camera.camera2)
+    implementation(libs.androidx.camera.lifecycle.v150alpha03)
+    implementation(libs.androidx.camera.video)
+    implementation(libs.androidx.camera.view.v150alpha03)
+    implementation(libs.androidx.camera.mlkit.vision)
+    implementation(libs.androidx.camera.extensions)
+
 }

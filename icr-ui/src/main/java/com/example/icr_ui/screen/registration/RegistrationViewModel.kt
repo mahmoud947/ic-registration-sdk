@@ -1,6 +1,5 @@
-package com.example.icr_ui.screen
+package com.example.icr_ui.screen.registration
 
-import android.util.Log
 import com.example.icr_core.base.ICRViewModel
 import com.example.icr_core.base.Resource
 import com.example.icr_core.base.ShowToast

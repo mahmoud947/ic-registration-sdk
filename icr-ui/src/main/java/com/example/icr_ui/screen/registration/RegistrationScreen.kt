@@ -1,4 +1,4 @@
-package com.example.icr_ui.screen
+package com.example.icr_ui.screen.registration
 
 import android.widget.Toast
 import androidx.compose.foundation.layout.Column
