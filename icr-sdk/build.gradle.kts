@@ -7,7 +7,7 @@ plugins {
 
 android {
     namespace = "com.example.icr_sdk"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         minSdk = 24

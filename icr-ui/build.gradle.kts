@@ -9,7 +9,7 @@ plugins {
 
 android {
     namespace = "com.example.icr_ui"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         minSdk = 24
@@ -62,4 +62,5 @@ dependencies {
     implementation(libs.koin.android)
     implementation(libs.koin.core)
     implementation(libs.koin.androidx.compose)
+    debugImplementation(libs.ui.tooling)
 }

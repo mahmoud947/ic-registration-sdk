@@ -1,4 +1,4 @@
-package com.example.icr_sdk.ui.theme
+package com.example.icr_ui.theme
 
 import androidx.compose.ui.graphics.Color
 
