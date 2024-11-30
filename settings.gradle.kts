@@ -21,4 +21,8 @@ dependencyResolutionManagement {
 
 rootProject.name = "ic-registration-sdk"
 include(":app")
-include(":ic-registration-sdk")
+include(":icr-sdk")
+include(":icr-core")
+include(":icr-data")
+include(":icr-domain")
+include(":icr-ui")
