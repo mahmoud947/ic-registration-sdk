@@ -3,6 +3,7 @@ package com.example.icr_domain.usecases
 import com.example.icr_core.base.BaseIOUseCase
 import com.example.icr_core.base.Resource
 import com.example.icr_core.error.DatabaseInsertException
+import com.example.icr_core.error.ICRException
 import com.example.icr_domain.models.ICRUser
 import com.example.icr_domain.repositories.AuthRepository
 import kotlinx.coroutines.flow.Flow
@@ -17,6 +18,6 @@ class RegisterNewUserUseCase(
         val result = authRepository.insertUser(input)
         emit(Resource.Success(result))
     }.catch {
-        emit(Resource.Error(DatabaseInsertException(it)))
+        emit(Resource.Error(ICRException(message = it.message)))
     }
 }

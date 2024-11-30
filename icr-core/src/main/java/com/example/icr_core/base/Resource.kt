@@ -1,12 +1,12 @@
 package com.example.icr_core.base
 
-import com.example.icr_core.error.SCRException
+import com.example.icr_core.error.ICRException
 
 
 sealed class Resource<out T> {
     data class Success<T>(val data: T) : Resource<T>()
     data class Error(
-        val exception: SCRException,
+        val exception: ICRException,
         val code: Int? = null
     ) : Resource<Nothing>()
 

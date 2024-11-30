@@ -6,4 +6,5 @@ val appModules: List<Module> = listOf(
     localModule,
     repositoryModule,
     useCaseModule,
+    viewModelModule
 )

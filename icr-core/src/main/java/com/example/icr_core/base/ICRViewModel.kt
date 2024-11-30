@@ -19,9 +19,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.plus
 
-abstract class ICRViewModel<Event : ViewEvent, UiState : ViewState>(
-    private val application: Application
-) : ViewModel() {
+abstract class ICRViewModel<Event : ViewEvent, UiState : ViewState>() : ViewModel() {
     private val initialState: UiState by lazy { setInitialState() }
     abstract fun setInitialState(): UiState
 

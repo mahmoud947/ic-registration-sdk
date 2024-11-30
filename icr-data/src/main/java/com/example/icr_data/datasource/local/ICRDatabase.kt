@@ -39,15 +39,5 @@ abstract class ICRDatabase : RoomDatabase() {
         }
     }
 
-    suspend fun insertDemoUser() {
-        userDao.insertUser(
-            ICRUserEntity(
-                firstName = "test",
-                lastName = "test",
-                email = "test",
-                password = "test"
-            )
-        )
-    }
 
 }
