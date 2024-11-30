@@ -6,8 +6,8 @@ import androidx.room.PrimaryKey
 data class ICRUserEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Int? = null,
-    val firstName: String,
-    val lastName: String,
+    val username: String,
+    val phoneNumber: String,
     val email: String,
     val password: String
 )
