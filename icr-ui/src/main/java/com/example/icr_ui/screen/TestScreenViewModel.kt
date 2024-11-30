@@ -4,7 +4,7 @@ import android.util.Log
 import com.example.icr_core.base.ICRViewModel
 import com.example.icr_core.base.Resource
 import com.example.icr_domain.models.ICRUser
-import com.example.icr_domain.usecases.RegisterNewUserUseCase
+import com.example.icr_domain.usecases.auth.RegisterNewUserUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.flowOn

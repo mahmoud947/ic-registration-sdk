@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <resources>
+        <string name="this_field_can_not_be_empty">لا يمكن أن يكون هذا الحقل فارغاً</string>
+        <string name="password_cant_be_less_6_chars">كلمة المرور لا يمكن أن تكون أقل من 6 أحرف</string>
+        <string name="invalid_email_format">تنسيق البريد الإلكتروني غير صحيح</string>
+        <string name="passwords_do_not_match">كلمتا المرور غير متطابقتين</string>
+        <string name="invalid_phone_number">رقم الهاتف غير صحيح</string>
+    </resources>
+</resources>

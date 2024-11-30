@@ -1,4 +1,4 @@
-package com.example.icr_domain.usecases
+package com.example.icr_domain.usecases.auth
 
 import com.example.icr_core.base.BaseIOUseCase
 import com.example.icr_core.base.Resource
