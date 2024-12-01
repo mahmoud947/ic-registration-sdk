@@ -20,6 +20,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import coil.compose.AsyncImage
 import com.example.icr_core.base.ViewSideEffect
 import com.example.icr_ui.components.ICRCircularCameraPreview
 import kotlinx.coroutines.flow.Flow
@@ -60,6 +61,10 @@ fun SmileDetectionScreen(
                 onEvent(SmileDetectionContract.Event.SaveImage(it))
             }) { bitmap ->
                 onEvent(SmileDetectionContract.Event.OnStartSmileDetection(bitmap))
+            }
+
+            uiState.imageUri?.let {
+                AsyncImage(model = it, contentDescription = "Picture")
             }
         }
 
