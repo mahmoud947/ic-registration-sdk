@@ -2,7 +2,6 @@ package com.example.icr_ui.navigation
 
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.NamedNavArgument
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -47,7 +46,6 @@ fun NavGraphBuilder.mainNavGraph(navController: NavHostController) {
                 userId = userId,
                 onEvent = viewModel::setEvent,
                 sideEffect = viewModel.effect,
-                navController = navController
             )
         }
     }

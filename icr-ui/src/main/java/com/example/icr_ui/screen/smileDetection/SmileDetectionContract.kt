@@ -14,10 +14,12 @@ class SmileDetectionContract {
         data class OnStartSmileDetection(val bitmap: Bitmap) : Event()
         data class SaveImage(val bitmap: Bitmap) : Event()
         data class OnSetUserId(val userId: Long) : Event()
+        data object OnCancel: Event()
     }
 
     sealed class SideEffect : ViewSideEffect {
         data class Finish(val userDetails: ICRUserWithImage?) : SideEffect()
+        data object Cancel: SideEffect()
     }
 
     data class State(

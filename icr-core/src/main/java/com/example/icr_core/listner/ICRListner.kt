@@ -6,6 +6,7 @@ import com.example.icr_core.enums.Language
 interface ICRSDKCoreListener {
     fun onValidationSuccess(icrResult: ICRResult)
     fun onValidationFailure(exception: Exception)
+    fun onCancelByUser()
 }
 
 object ICRSDKManager {

@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import com.example.ic_registration_sdk.ui.theme.IcregistrationsdkTheme
 import com.example.icr_sdk.*
@@ -26,17 +25,12 @@ class MainActivity : ComponentActivity() {
             .context(this.applicationContext).build()
         enableEdgeToEdge()
         setContent {
-
-            val scope = rememberCoroutineScope()
             IcregistrationsdkTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     Column(
                         modifier = Modifier.padding(innerPadding)
                     ) {
                         Button(onClick = {
-//                            scope.launch(Dispatchers.IO) {
-//                                icrsdk.insertUser()
-//                            }
                             icrsdk.validateNewUser(this@MainActivity, object : ICRSDKListener {
                                 override fun onValidationSuccess(user: ICRSdkResult) {
                                     Toast.makeText(

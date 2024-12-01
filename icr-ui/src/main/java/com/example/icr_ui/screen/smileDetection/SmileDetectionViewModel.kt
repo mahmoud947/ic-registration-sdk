@@ -2,33 +2,36 @@ package com.example.icr_ui.screen.smileDetection
 
 import android.app.Application
 import android.graphics.Bitmap
-import android.graphics.Matrix
 import android.net.Uri
 import androidx.core.content.FileProvider
 import com.example.icr_core.base.ICRApplicationViewModel
 import com.example.icr_core.base.Resource
 import com.example.icr_core.base.ShowMessage
 import com.example.icr_core.error.NoFaceDetectedException
+import com.example.icr_core.listner.ICRSDKManager
+import com.example.icr_core.utils.rotateBitmap
+import com.example.icr_domain.R
+import com.example.icr_domain.models.ICRImage
 import com.example.icr_domain.usecases.faceDetection.DetectSmileUseCase
+import com.example.icr_domain.usecases.user.DeleteUserByIdUseCase
+import com.example.icr_domain.usecases.user.GetUserDataByUserIdUseCase
+import com.example.icr_domain.usecases.user.InsertUserImageUseCase
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.FileOutputStream
-import com.example.icr_domain.R
-import com.example.icr_domain.models.ICRImage
-import com.example.icr_domain.usecases.user.GetUserDataByUserIdUseCase
-import com.example.icr_domain.usecases.user.InsertUserImageUseCase
-import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.flow.debounce
-import kotlinx.coroutines.flow.distinctUntilChanged
 import java.io.IOException
 
 class SmileDetectionViewModel(
     private val detectSmileUseCase: DetectSmileUseCase,
     private val saveUserImageUseCase: InsertUserImageUseCase,
     private val getUserDataByUserIdUseCase: GetUserDataByUserIdUseCase,
+    private val deleteImageUseCase: DeleteUserByIdUseCase,
     private val appContext: Application
 ) : ICRApplicationViewModel<SmileDetectionContract.Event, SmileDetectionContract.State>(
     appContext
@@ -40,8 +43,10 @@ class SmileDetectionViewModel(
             is SmileDetectionContract.Event.OnStartSmileDetection -> detectSmile(event.bitmap)
             is SmileDetectionContract.Event.SaveImage -> saveBitmapToNonMediaStorage(event.bitmap)
             is SmileDetectionContract.Event.OnSetUserId -> setState { copy(userId = event.userId) }
+            SmileDetectionContract.Event.OnCancel -> onCancel()
         }
     }
+
 
     @OptIn(FlowPreview::class)
     private fun detectSmile(bitmap: Bitmap) = launchCoroutine(Dispatchers.Default) {
@@ -64,6 +69,9 @@ class SmileDetectionViewModel(
                                     ShowMessage(
                                         title = R.string.error_title,
                                         message = R.string.general_error_message,
+                                        positiveAction = {
+                                            onCancel()
+                                        }
                                     )
                                 }
                             }
@@ -92,7 +100,7 @@ class SmileDetectionViewModel(
                 setState {
                     copy(loading = true)
                 }
-                val rotatedBitmap = rotateBitmap(bitmap, -90f)
+                val rotatedBitmap = bitmap.rotateBitmap(90f)
                 val directory = File(appContext.filesDir, "SmileDetection")
                 if (!directory.exists() && !directory.mkdirs()) {
                     throw IOException("Failed to create directory: ${directory.absolutePath}")
@@ -135,6 +143,9 @@ class SmileDetectionViewModel(
                         ShowMessage(
                             title = R.string.error_title,
                             message = R.string.general_error_message,
+                            positiveAction = {
+                                onCancel()
+                            }
                         )
                     }
                 }
@@ -156,6 +167,9 @@ class SmileDetectionViewModel(
                             ShowMessage(
                                 title = R.string.error_title,
                                 message = R.string.general_error_message,
+                                positiveAction = {
+                                    onCancel()
+                                }
                             )
                         }
                     }
@@ -180,6 +194,9 @@ class SmileDetectionViewModel(
                             ShowMessage(
                                 title = R.string.error_title,
                                 message = R.string.general_error_message,
+                                positiveAction = {
+                                    onCancel()
+                                }
                             )
                         }
                     }
@@ -194,17 +211,30 @@ class SmileDetectionViewModel(
             }
     }
 
+    private fun onCancel() = launchCoroutine(Dispatchers.IO) {
+        deleteImageUseCase(input = viewState.value.userId.toInt())
+            .flowOn(Dispatchers.IO)
+            .collectLatest { resource ->
+                when (resource) {
+                    is Resource.Error -> {
+                        setEffect {
+                            ShowMessage(
+                                title = R.string.error_title,
+                                message = R.string.general_error_message,
+                                positiveAction = {
+                                    ICRSDKManager.listener?.onValidationFailure(Exception(resource.exception))
+                                }
+                            )
+                        }
+                    }
 
-    private fun rotateBitmap(bitmap: Bitmap, rotationDegrees: Float): Bitmap {
-        val matrix = Matrix().apply { postRotate(rotationDegrees) }
-        return Bitmap.createBitmap(
-            bitmap,
-            0,
-            0,
-            bitmap.width,
-            bitmap.height,
-            matrix,
-            true
-        )
+                    is Resource.Loading -> {}
+                    is Resource.Success -> {
+                        setEffect { SmileDetectionContract.SideEffect.Cancel }
+                    }
+                }
+            }
     }
+
+
 }

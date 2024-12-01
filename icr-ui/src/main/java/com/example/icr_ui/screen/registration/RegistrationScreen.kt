@@ -1,6 +1,5 @@
 package com.example.icr_ui.screen.registration
 
-import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -21,7 +20,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -30,7 +28,6 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.icr_core.base.OnEffect
 import com.example.icr_core.base.ShowMessage
-import com.example.icr_core.base.ShowToast
 import com.example.icr_core.base.ViewSideEffect
 import com.example.icr_core.utils.Margin
 import com.example.icr_domain.R
@@ -58,8 +55,6 @@ fun RegistrationScreen(
     sideEffect: Flow<ViewSideEffect> = emptyFlow(),
     navController: NavController = rememberNavController()
 ) {
-    val context = LocalContext.current
-
     var isBottomSheetOpen by remember { mutableStateOf(false) }
     val scope = rememberCoroutineScope()
     var bottomSheet by remember { mutableStateOf(ShowMessage()) }

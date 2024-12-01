@@ -17,9 +17,6 @@ data class ShowMessage(
     val positiveAction: () -> Unit = {},
 ) : ViewSideEffect
 
-data class ShowToast(@StringRes val message: Int) : ViewSideEffect
-
-
 @Composable
 fun Flow<ViewSideEffect>.OnEffect(action: (effect: ViewSideEffect) -> Unit) {
     LaunchedEffect(Unit) {

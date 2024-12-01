@@ -3,6 +3,7 @@ package com.example.icr_ui.screen.registration
 import com.example.icr_core.base.ICRViewModel
 import com.example.icr_core.base.Resource
 import com.example.icr_core.base.ShowMessage
+import com.example.icr_core.listner.ICRSDKManager
 import com.example.icr_domain.models.ICRUser
 import com.example.icr_domain.usecases.user.InsertNewUserUseCase
 import com.example.icr_domain.usecases.validation.FormValidationUseCase
@@ -11,7 +12,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.flowOn
 
-private const val TAG = "TestScreenViewModel"
 
 class RegistrationViewModel(
     private val insertNewUserUseCase: InsertNewUserUseCase,
@@ -49,6 +49,9 @@ class RegistrationViewModel(
                                 ShowMessage(
                                     title = com.example.icr_domain.R.string.error_title,
                                     message = com.example.icr_domain.R.string.general_error_message,
+                                    positiveAction = {
+                                        ICRSDKManager.listener?.onValidationFailure(Exception(resource.exception))
+                                    }
                                 )
                             }
                         }
