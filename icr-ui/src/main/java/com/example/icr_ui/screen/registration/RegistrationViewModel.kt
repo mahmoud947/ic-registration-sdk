@@ -4,7 +4,7 @@ import com.example.icr_core.base.ICRViewModel
 import com.example.icr_core.base.Resource
 import com.example.icr_core.base.ShowToast
 import com.example.icr_domain.models.ICRUser
-import com.example.icr_domain.usecases.auth.RegisterNewUserUseCase
+import com.example.icr_domain.usecases.user.InsertNewUserUseCase
 import com.example.icr_domain.usecases.validation.FormValidationUseCase
 import com.example.icr_domain.usecases.validation.ValidateConfirmPasswordUseCaseIN
 import kotlinx.coroutines.Dispatchers
@@ -15,7 +15,7 @@ import com.example.icr_ui.R
 private const val TAG = "TestScreenViewModel"
 
 class RegistrationViewModel(
-    private val insertNewUserUseCase: RegisterNewUserUseCase,
+    private val insertNewUserUseCase: InsertNewUserUseCase,
     private val formValidationUseCase: FormValidationUseCase,
 ) : ICRViewModel<RegistrationContract.Event, RegistrationContract.State>() {
     override fun setInitialState(): RegistrationContract.State = RegistrationContract.State()

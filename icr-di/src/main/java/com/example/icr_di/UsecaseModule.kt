@@ -1,6 +1,6 @@
 package com.example.icr_di
 
-import com.example.icr_domain.usecases.auth.RegisterNewUserUseCase
+import com.example.icr_domain.usecases.user.InsertNewUserUseCase
 import com.example.icr_domain.usecases.faceDetection.DetectSmileUseCase
 import com.example.icr_domain.usecases.validation.FormValidationUseCase
 import com.example.icr_domain.usecases.validation.ValidateConfirmPasswordUseCase
@@ -11,7 +11,7 @@ import com.example.icr_domain.usecases.validation.ValidateTextUseCase
 import org.koin.dsl.module
 
 val useCaseModule = module {
-    factory<RegisterNewUserUseCase> { RegisterNewUserUseCase(get()) }
+    factory<InsertNewUserUseCase> { InsertNewUserUseCase(get()) }
     factory<ValidateTextUseCase> { ValidateTextUseCase() }
     factory<ValidatePhoneNumberUseCase> { ValidatePhoneNumberUseCase() }
     factory<ValidateEmailUseCase> { ValidateEmailUseCase() }

@@ -1,6 +1,5 @@
 package com.example.icr_data.repositories
 
-import com.example.icr_core.base.Mapper
 import com.example.icr_data.datasource.local.daos.ICRImageDao
 import com.example.icr_data.datasource.local.daos.ICRUserDao
 import com.example.icr_data.datasource.local.entities.ICRImageEntity

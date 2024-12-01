@@ -1,4 +1,4 @@
-package com.example.icr_domain.usecases.auth
+package com.example.icr_domain.usecases.user
 
 import com.example.icr_core.base.BaseIOUseCase
 import com.example.icr_core.base.Resource
@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 
-class RegisterNewUserUseCase(
+class InsertNewUserUseCase(
     private val authRepository: AuthRepository
 ) : BaseIOUseCase<ICRUser, Flow<Resource<Long>>> {
     override fun invoke(input: ICRUser): Flow<Resource<Long>> = flow {
