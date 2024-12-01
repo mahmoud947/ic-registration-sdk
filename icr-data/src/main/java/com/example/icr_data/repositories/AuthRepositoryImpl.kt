@@ -16,4 +16,8 @@ class AuthRepositoryImpl(
         return icrUserDao.insertUser(entity)
     }
 
+    override suspend fun deleteUserId(id: Int) {
+        icrUserDao.deleteUserById(id)
+    }
+
 }

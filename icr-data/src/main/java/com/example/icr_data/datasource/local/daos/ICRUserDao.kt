@@ -20,4 +20,6 @@ interface ICRUserDao {
     @Query("SELECT * FROM icr_users")
     suspend fun getAllUsers(): List<ICRUserEntity>
 
+    @Query("DELETE FROM icr_users WHERE id = :id")
+    suspend fun deleteUserById(id: Int)
 }
