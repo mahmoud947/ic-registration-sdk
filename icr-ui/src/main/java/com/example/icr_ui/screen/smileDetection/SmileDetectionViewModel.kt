@@ -16,6 +16,7 @@ class SmileDetectionViewModel(
     override fun handleEvents(event: SmileDetectionContract.Event) {
         when(event){
             is SmileDetectionContract.Event.OnStartSmileDetection -> detectSmile(event.bitmap)
+            is SmileDetectionContract.Event.SaveImage ->{}
         }
     }
 

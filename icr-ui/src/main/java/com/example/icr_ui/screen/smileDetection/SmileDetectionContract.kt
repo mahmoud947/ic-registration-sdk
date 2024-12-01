@@ -9,6 +9,7 @@ import com.example.icr_core.base.ViewState
 class SmileDetectionContract {
     sealed class Event : ViewEvent {
         data class OnStartSmileDetection(val bitmap: Bitmap) : Event()
+        data class SaveImage(val bitmap: Bitmap) : Event()
     }
 
     sealed class SideEffect : ViewSideEffect {

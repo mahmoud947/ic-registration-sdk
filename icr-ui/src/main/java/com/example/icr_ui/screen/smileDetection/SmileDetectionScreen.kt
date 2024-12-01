@@ -7,7 +7,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -18,15 +17,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.icr_core.base.ViewSideEffect
-import com.example.icr_core.utils.Margin
 import com.example.icr_ui.components.ICRCircularCameraPreview
-import com.example.icr_ui.components.SmileProgressIndicator
-import com.example.icr_ui.screen.registration.RegistrationContract
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
 
@@ -59,15 +54,13 @@ fun SmileDetectionScreen(
         Column(
             modifier = modifier.padding(innerPadding),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Top
+            verticalArrangement = Arrangement.Center
         ) {
-            ICRCircularCameraPreview { bitmap ->
+            ICRCircularCameraPreview(uiState.smileProgress, onSmileDetected = {
+                onEvent(SmileDetectionContract.Event.SaveImage(it))
+            }) { bitmap ->
                 onEvent(SmileDetectionContract.Event.OnStartSmileDetection(bitmap))
             }
-            Margin(20.dp)
-            SmileProgressIndicator(
-                progress = uiState.smileProgress
-            )
         }
 
     }
