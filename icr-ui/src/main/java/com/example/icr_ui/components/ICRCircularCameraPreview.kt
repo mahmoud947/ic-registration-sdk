@@ -1,5 +1,6 @@
 package com.example.icr_ui.components
 
+import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.view.ViewGroup
 import androidx.camera.core.CameraSelector
@@ -19,8 +20,10 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.compose.LocalLifecycleOwner
+import com.example.icr_core.utils.resize
 import java.util.concurrent.Executors
 
+@SuppressLint("RestrictedApi")
 @Composable
 fun ICRCircularCameraPreview(onFrameCaptured: (Bitmap) -> Unit) {
     val context = LocalContext.current
@@ -38,13 +41,25 @@ fun ICRCircularCameraPreview(onFrameCaptured: (Bitmap) -> Unit) {
             }
             val cameraProvider = cameraProviderFuture.get()
             val preview = Preview.Builder().build()
-            val imageAnalyzer = ImageAnalysis.Builder().build().apply {
-                setAnalyzer(executor) { imageProxy ->
-                    val bitmap = imageProxy.toBitmap()
-                    onFrameCaptured(bitmap)
-                    imageProxy.close()
+            val imageAnalyzer = ImageAnalysis
+                .Builder()
+                .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
+                .setMaxResolution(
+                    android.util.Size(320, 240)
+                )
+                .build().apply {
+                    setAnalyzer(executor) { imageProxy ->
+                        try {
+                            val bitmap =
+                                imageProxy.toBitmap().resize(320, 240)
+                            onFrameCaptured(bitmap)
+                        } catch (e: Exception) {
+
+                        } finally {
+                            imageProxy.close()
+                        }
+                    }
                 }
-            }
             val cameraSelector = CameraSelector.DEFAULT_FRONT_CAMERA
             cameraProvider.unbindAll()
             cameraProvider.bindToLifecycle(lifecycleOwner, cameraSelector, preview, imageAnalyzer)

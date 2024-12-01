@@ -10,7 +10,9 @@ import com.example.icr_ui.navigation.screens.ICRScreen
 import com.example.icr_ui.screen.registration.RegistrationContract
 import com.example.icr_ui.screen.registration.RegistrationScreen
 import com.example.icr_ui.screen.registration.RegistrationViewModel
+import com.example.icr_ui.screen.smileDetection.SmileDetectionContract
 import com.example.icr_ui.screen.smileDetection.SmileDetectionScreen
+import com.example.icr_ui.screen.smileDetection.SmileDetectionViewModel
 import org.koin.androidx.compose.koinViewModel
 
 fun NavGraphBuilder.mainNavGraph(navController: NavHostController) {
@@ -29,8 +31,15 @@ fun NavGraphBuilder.mainNavGraph(navController: NavHostController) {
             )
         }
 
-        composable(route =ICRScreen.SmileDetection.route){
-            SmileDetectionScreen()
+        composable(route = ICRScreen.SmileDetection.route) {
+            val viewModel: SmileDetectionViewModel = koinViewModel()
+            val state: SmileDetectionContract.State by viewModel.viewState.collectAsStateWithLifecycle()
+            SmileDetectionScreen(
+                uiState = state,
+                onEvent = viewModel::setEvent,
+                sideEffect = viewModel.effect,
+                navController = navController
+            )
         }
     }
 }
