@@ -8,6 +8,5 @@ import org.koin.dsl.module
 
 val viewModelModule = module {
     viewModel { RegistrationViewModel(get(), get()) }
-    viewModel { SmileDetectionViewModel(get(),androidApplication()) }
-
+    viewModel { SmileDetectionViewModel(get(),get(),androidApplication()) }
 }

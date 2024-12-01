@@ -12,6 +12,7 @@ class SmileDetectionContract {
     sealed class Event : ViewEvent {
         data class OnStartSmileDetection(val bitmap: Bitmap) : Event()
         data class SaveImage(val bitmap: Bitmap) : Event()
+        data class OnSetUserId(val userId: Long) : Event()
     }
 
     sealed class SideEffect : ViewSideEffect {
@@ -24,6 +25,7 @@ class SmileDetectionContract {
         val imageUri: Uri? = null,
         val stopSmileDetection: Boolean = false,
         @StringRes
-        val screenMessage: Int? = null
+        val screenMessage: Int? = null,
+        val userId: Long = 0
     ) : ViewState
 }

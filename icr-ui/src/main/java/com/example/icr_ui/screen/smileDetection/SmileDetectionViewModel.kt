@@ -3,6 +3,7 @@ package com.example.icr_ui.screen.smileDetection
 import android.app.Application
 import android.graphics.Bitmap
 import android.graphics.Matrix
+import android.net.Uri
 import androidx.core.content.FileProvider
 import com.example.icr_core.base.ICRApplicationViewModel
 import com.example.icr_core.base.Resource
@@ -16,6 +17,8 @@ import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.FileOutputStream
 import com.example.icr_domain.R
+import com.example.icr_domain.models.ICRImage
+import com.example.icr_domain.usecases.user.InsertUserImageUseCase
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -23,6 +26,7 @@ import java.io.IOException
 
 class SmileDetectionViewModel(
     private val detectSmileUseCase: DetectSmileUseCase,
+    private val saveUserImageUseCase: InsertUserImageUseCase,
     private val appContext: Application
 ) : ICRApplicationViewModel<SmileDetectionContract.Event, SmileDetectionContract.State>(
     appContext
@@ -33,6 +37,7 @@ class SmileDetectionViewModel(
         when (event) {
             is SmileDetectionContract.Event.OnStartSmileDetection -> detectSmile(event.bitmap)
             is SmileDetectionContract.Event.SaveImage -> saveBitmapToNonMediaStorage(event.bitmap)
+            is SmileDetectionContract.Event.OnSetUserId -> setState { copy(userId = event.userId) }
         }
     }
 
@@ -51,7 +56,6 @@ class SmileDetectionViewModel(
                                     copy(screenMessage = R.string.center_face_message)
                                 }
                             }
-
                             else -> {
                                 setEffect {
                                     ShowMessage(
@@ -59,15 +63,11 @@ class SmileDetectionViewModel(
                                         message = R.string.general_error_message,
                                     )
                                 }
-
                             }
                         }
                     }
 
-                    is Resource.Loading -> {
-
-                    }
-
+                    is Resource.Loading -> {}
                     is Resource.Success -> {
                         val message =
                             if (resource.data != 0f) R.string.start_smile_message else null
@@ -110,6 +110,7 @@ class SmileDetectionViewModel(
                     "${appContext.packageName}.fileprovider",
                     file
                 )
+                saveUserImage(userId = viewState.value.userId, imageUri = uri)
 
                 withContext(Dispatchers.Main) {
                     setState {
@@ -138,6 +139,33 @@ class SmileDetectionViewModel(
                 }
             }
         }
+    }
+
+    private fun saveUserImage(userId: Long, imageUri: Uri) = launchCoroutine(Dispatchers.IO) {
+        val image = ICRImage(
+            userId = userId.toInt(),
+            uri = imageUri,
+        )
+        saveUserImageUseCase(input = image)
+            .flowOn(Dispatchers.IO)
+            .collectLatest { resource ->
+                when (resource) {
+                    is Resource.Error -> {
+                        setEffect {
+                            ShowMessage(
+                                title = R.string.error_title,
+                                message = R.string.general_error_message,
+                            )
+                        }
+                    }
+                    is Resource.Loading -> {}
+
+                    is Resource.Success -> {
+                        setEffect { SmileDetectionContract.SideEffect.Finish }
+                    }
+                }
+
+            }
     }
 
 

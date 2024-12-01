@@ -2,7 +2,7 @@ package com.example.icr_ui.screen.smileDetection
 
 import android.Manifest
 import android.content.pm.PackageManager
-import android.widget.Toast
+import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
@@ -33,16 +33,18 @@ import androidx.navigation.compose.rememberNavController
 import com.example.icr_core.base.OnEffect
 import com.example.icr_core.base.ShowMessage
 import com.example.icr_core.base.ViewSideEffect
+import com.example.icr_core.error.ICRException
+import com.example.icr_core.listner.ICRSDKManager
 import com.example.icr_core.utils.Margin
-import com.example.icr_ui.components.ICRCircularCameraPreview
-import com.example.icr_ui.components.ICRText
+import com.example.icr_domain.R
 import com.example.icr_ui.components.ICRBottomSheet
+import com.example.icr_ui.components.ICRCircularCameraPreview
+import com.example.icr_ui.components.ICRLottiAnimation
+import com.example.icr_ui.components.ICRText
 import com.example.icr_ui.theme.medium
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.launch
-import com.example.icr_domain.R
-import com.example.icr_ui.components.ICRLottiAnimation
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -77,11 +79,14 @@ fun SmileDetectionScreen(
             cameraPermissionLauncher.launch(Manifest.permission.CAMERA)
         }
     }
+    LaunchedEffect(Unit) {
+        onEvent(SmileDetectionContract.Event.OnSetUserId(userId))
+    }
 
     sideEffect.OnEffect { effect ->
         when (effect) {
             is SmileDetectionContract.SideEffect.Finish -> {
-
+                (context as? ComponentActivity)?.finish()
             }
 
             is ShowMessage -> {

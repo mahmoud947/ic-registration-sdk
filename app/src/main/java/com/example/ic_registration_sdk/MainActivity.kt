@@ -1,6 +1,7 @@
 package com.example.ic_registration_sdk
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -14,13 +15,13 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import com.example.ic_registration_sdk.ui.theme.IcregistrationsdkTheme
 import com.example.icr_sdk.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val icrsdk = ICRBuilder.Builder().context(this.applicationContext).build()
+        val icrsdk = ICRSDK
+            .Builder()
+            .context(this.applicationContext).build()
         enableEdgeToEdge()
         setContent {
 
@@ -34,7 +35,20 @@ class MainActivity : ComponentActivity() {
 //                            scope.launch(Dispatchers.IO) {
 //                                icrsdk.insertUser()
 //                            }
-                            icrsdk.insertNewUser(this@MainActivity)
+                            icrsdk.validateNewUser(this@MainActivity, object : ICRSDKTListener {
+                                override fun onValidationSuccess() {
+                                    TODO("Not yet implemented")
+                                }
+
+                                override fun onValidationFailure(exception: Exception) {
+                                    Toast.makeText(
+                                        this@MainActivity,
+                                        exception.message,
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
+
+                            })
                         }) {
                             Text(text = "Insert User")
                         }

@@ -3,7 +3,6 @@ package com.example.icr_ui.screen.registration
 import com.example.icr_core.base.ICRViewModel
 import com.example.icr_core.base.Resource
 import com.example.icr_core.base.ShowMessage
-import com.example.icr_core.base.ShowToast
 import com.example.icr_domain.models.ICRUser
 import com.example.icr_domain.usecases.user.InsertNewUserUseCase
 import com.example.icr_domain.usecases.validation.FormValidationUseCase
@@ -11,7 +10,6 @@ import com.example.icr_domain.usecases.validation.ValidateConfirmPasswordUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.flowOn
-import com.example.icr_ui.R
 
 private const val TAG = "TestScreenViewModel"
 
@@ -34,7 +32,6 @@ class RegistrationViewModel(
 
 
     private fun insertNewUser() = launchCoroutine(Dispatchers.IO) {
-
         if (isValidForm()) {
             insertNewUserUseCase(
                 input = ICRUser(
