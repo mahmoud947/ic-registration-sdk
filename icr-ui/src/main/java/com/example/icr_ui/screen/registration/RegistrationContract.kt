@@ -16,7 +16,7 @@ class RegistrationContract {
     }
 
     sealed class SideEffect : ViewSideEffect {
-        data object NavigateToNextScreen : SideEffect()
+        data class NavigateToNextScreen(val userId: Long) : SideEffect()
     }
 
     data class State(

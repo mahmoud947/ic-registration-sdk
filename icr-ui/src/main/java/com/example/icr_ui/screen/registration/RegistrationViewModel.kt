@@ -2,6 +2,7 @@ package com.example.icr_ui.screen.registration
 
 import com.example.icr_core.base.ICRViewModel
 import com.example.icr_core.base.Resource
+import com.example.icr_core.base.ShowMessage
 import com.example.icr_core.base.ShowToast
 import com.example.icr_domain.models.ICRUser
 import com.example.icr_domain.usecases.user.InsertNewUserUseCase
@@ -47,6 +48,12 @@ class RegistrationViewModel(
                     when (resource) {
                         is Resource.Error -> {
                             setState { copy(loading = false) }
+                            setEffect {
+                                ShowMessage(
+                                    title = com.example.icr_domain.R.string.error_title,
+                                    message = com.example.icr_domain.R.string.general_error_message,
+                                )
+                            }
                         }
 
                         Resource.Loading -> {
@@ -56,9 +63,7 @@ class RegistrationViewModel(
                         is Resource.Success -> {
                             setState { copy(loading = false) }
                             setEffect {
-                                ShowToast(
-                                    message = R.string.successfully,
-                                )
+                                RegistrationContract.SideEffect.NavigateToNextScreen(userId = resource.data)
                             }
                         }
                     }

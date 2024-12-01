@@ -51,6 +51,7 @@ fun SmileDetectionScreen(
     uiState: SmileDetectionContract.State = SmileDetectionContract.State(),
     onEvent: (SmileDetectionContract.Event) -> Unit = {},
     sideEffect: Flow<ViewSideEffect> = emptyFlow(),
+    userId: Long,
     navController: NavController = rememberNavController()
 ) {
     val context = LocalContext.current

@@ -6,11 +6,19 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -21,20 +29,27 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.icr_core.base.OnEffect
+import com.example.icr_core.base.ShowMessage
 import com.example.icr_core.base.ShowToast
 import com.example.icr_core.base.ViewSideEffect
 import com.example.icr_core.utils.Margin
+import com.example.icr_domain.R
+import com.example.icr_ui.components.ICRBottomSheet
 import com.example.icr_ui.components.ICRFlatButton
+import com.example.icr_ui.components.ICRLottiAnimation
 import com.example.icr_ui.components.ICROutlinedTextField
 import com.example.icr_ui.components.ICRText
+import com.example.icr_ui.navigation.screens.ICRScreen
 import com.example.icr_ui.theme.IcregistrationsdkTheme
 import com.example.icr_ui.theme.extraLarge
 import com.example.icr_ui.theme.extraSmall
 import com.example.icr_ui.theme.large
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
+import kotlinx.coroutines.launch
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RegistrationScreen(
     modifier: Modifier = Modifier,
@@ -44,10 +59,27 @@ fun RegistrationScreen(
     navController: NavController = rememberNavController()
 ) {
     val context = LocalContext.current
+
+    var isBottomSheetOpen by remember { mutableStateOf(false) }
+    val scope = rememberCoroutineScope()
+    var bottomSheet by remember { mutableStateOf(ShowMessage()) }
+
+    val bottomSheetSate = rememberModalBottomSheetState(
+        skipPartiallyExpanded = true
+    )
+
     sideEffect.OnEffect { effect ->
         when (effect) {
-            is ShowToast -> {
-                Toast.makeText(context, effect.message, Toast.LENGTH_SHORT).show()
+            is ShowMessage -> {
+                bottomSheet = effect
+                scope.launch {
+                    bottomSheetSate.show()
+                    isBottomSheetOpen = true
+                }
+
+            }
+            is RegistrationContract.SideEffect.NavigateToNextScreen->{
+                navController.navigate(ICRScreen.SmileDetection.createRoute(effect.userId))
             }
         }
     }
@@ -167,6 +199,35 @@ fun RegistrationScreen(
                 text = "Next",
                 isLoading = uiState.loading,
                 onClick = { onEvent(RegistrationContract.Event.OnNextClick) }
+            )
+        }
+
+        if (isBottomSheetOpen) {
+            ICRBottomSheet(
+                sheetState = bottomSheetSate,
+                modifier = Modifier.fillMaxWidth(),
+                positiveActionLabel = stringResource(R.string.ok),
+                title = stringResource(bottomSheet.title ?: R.string.ok),
+                subTitle = stringResource(bottomSheet.message ?: R.string.ok),
+                onDismiss = {
+                    isBottomSheetOpen = false
+                    scope.launch {
+                        bottomSheetSate.hide()
+                    }
+                },
+                onPositive = {
+                    isBottomSheetOpen = false
+                    scope.launch {
+                        bottomSheetSate.hide()
+                    }
+                    bottomSheet.positiveAction()
+                },
+                iconContent = {
+                    ICRLottiAnimation(
+                        modifier = Modifier.size(100.dp),
+                        rowLottie = bottomSheet.icon ?: R.raw.warning_animation
+                    )
+                }
             )
         }
     }

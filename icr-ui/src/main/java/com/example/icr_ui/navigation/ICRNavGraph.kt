@@ -2,10 +2,14 @@ package com.example.icr_ui.navigation
 
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NamedNavArgument
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
 import androidx.navigation.navigation
+import com.example.icr_ui.navigation.screens.Args
 import com.example.icr_ui.navigation.screens.ICRScreen
 import com.example.icr_ui.screen.registration.RegistrationContract
 import com.example.icr_ui.screen.registration.RegistrationScreen
@@ -18,7 +22,7 @@ import org.koin.androidx.compose.koinViewModel
 fun NavGraphBuilder.mainNavGraph(navController: NavHostController) {
     navigation(
         route = RootGraph.Main,
-        startDestination = ICRScreen.SmileDetection.route,
+        startDestination = ICRScreen.Registration.route,
     ) {
         composable(route = ICRScreen.Registration.route) {
             val viewModel: RegistrationViewModel = koinViewModel()
@@ -31,11 +35,16 @@ fun NavGraphBuilder.mainNavGraph(navController: NavHostController) {
             )
         }
 
-        composable(route = ICRScreen.SmileDetection.route) {
+        composable(
+            route = ICRScreen.SmileDetection.route,
+            arguments = listOf(navArgument(Args.userId) { type = NavType.LongType })
+        ) {
             val viewModel: SmileDetectionViewModel = koinViewModel()
             val state: SmileDetectionContract.State by viewModel.viewState.collectAsStateWithLifecycle()
+            val userId = it.arguments?.getLong(Args.userId) ?: 0
             SmileDetectionScreen(
                 uiState = state,
+                userId = userId,
                 onEvent = viewModel::setEvent,
                 sideEffect = viewModel.effect,
                 navController = navController
