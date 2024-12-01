@@ -1,3 +1,3 @@
 <resources>
-    <string name="title_activity_icractivity">ICRActivity</string>
+    <string name="title_activity_icractivity" translatable="false">ICRActivity</string>
 </resources>

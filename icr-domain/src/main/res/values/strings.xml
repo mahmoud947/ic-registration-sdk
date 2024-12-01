@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="this_field_can_not_be_empty">this field can\'t be empty</string>
-    <string name="password_cant_be_less_6_chars">Password cant be less than 6 chart</string>
+    <string name="password_cant_be_less_6_chars">Password cannot be less than 6 chart</string>
     <string name="invalid_email_format">Invalid email format</string>
     <string name="passwords_do_not_match">Passwords do not match</string>
     <string name="invalid_phone_number">Invalid phone number</string>

@@ -54,7 +54,7 @@ fun ICRCircularCameraPreview(onFrameCaptured: (Bitmap) -> Unit) {
                                 imageProxy.toBitmap().resize(320, 240)
                             onFrameCaptured(bitmap)
                         } catch (e: Exception) {
-
+                            e.printStackTrace()
                         } finally {
                             imageProxy.close()
                         }

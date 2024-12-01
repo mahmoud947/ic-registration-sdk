@@ -24,7 +24,7 @@ fun SmileProgressIndicator(progress: Int) {
             .border(4.dp, Color.Gray, CircleShape)
     ) {
         CircularProgressIndicator(
-            progress = progress / 100f, // Convert to 0-1 scale
+            progress = { progress / 100f },
             modifier = Modifier.size(300.dp),
             strokeWidth = 8.dp
         )
