@@ -15,6 +15,8 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import com.example.ic_registration_sdk.ui.theme.IcregistrationsdkTheme
 import com.example.icr_sdk.*
+import com.example.icr_sdk.module.ICRSdkResult
+import com.example.icr_sdk.utils.ICRSDKListener
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,9 +37,13 @@ class MainActivity : ComponentActivity() {
 //                            scope.launch(Dispatchers.IO) {
 //                                icrsdk.insertUser()
 //                            }
-                            icrsdk.validateNewUser(this@MainActivity, object : ICRSDKTListener {
-                                override fun onValidationSuccess() {
-                                    TODO("Not yet implemented")
+                            icrsdk.validateNewUser(this@MainActivity, object : ICRSDKListener {
+                                override fun onValidationSuccess(user: ICRSdkResult) {
+                                    Toast.makeText(
+                                        this@MainActivity,
+                                        user.toString(),
+                                        Toast.LENGTH_SHORT
+                                    ).show()
                                 }
 
                                 override fun onValidationFailure(exception: Exception) {

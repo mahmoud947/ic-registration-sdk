@@ -6,6 +6,7 @@ import androidx.annotation.StringRes
 import com.example.icr_core.base.ViewEvent
 import com.example.icr_core.base.ViewSideEffect
 import com.example.icr_core.base.ViewState
+import com.example.icr_domain.models.ICRUserWithImage
 
 
 class SmileDetectionContract {
@@ -16,7 +17,7 @@ class SmileDetectionContract {
     }
 
     sealed class SideEffect : ViewSideEffect {
-        data object Finish : SideEffect()
+        data class Finish(val userDetails: ICRUserWithImage?) : SideEffect()
     }
 
     data class State(

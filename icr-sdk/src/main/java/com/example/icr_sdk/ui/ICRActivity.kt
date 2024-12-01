@@ -1,4 +1,4 @@
-package com.example.icr_sdk
+package com.example.icr_sdk.ui
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity

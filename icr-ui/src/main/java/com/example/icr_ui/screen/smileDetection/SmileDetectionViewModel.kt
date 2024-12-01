@@ -18,6 +18,7 @@ import java.io.File
 import java.io.FileOutputStream
 import com.example.icr_domain.R
 import com.example.icr_domain.models.ICRImage
+import com.example.icr_domain.usecases.user.GetUserDataByUserIdUseCase
 import com.example.icr_domain.usecases.user.InsertUserImageUseCase
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.debounce
@@ -27,6 +28,7 @@ import java.io.IOException
 class SmileDetectionViewModel(
     private val detectSmileUseCase: DetectSmileUseCase,
     private val saveUserImageUseCase: InsertUserImageUseCase,
+    private val getUserDataByUserIdUseCase: GetUserDataByUserIdUseCase,
     private val appContext: Application
 ) : ICRApplicationViewModel<SmileDetectionContract.Event, SmileDetectionContract.State>(
     appContext
@@ -56,6 +58,7 @@ class SmileDetectionViewModel(
                                     copy(screenMessage = R.string.center_face_message)
                                 }
                             }
+
                             else -> {
                                 setEffect {
                                     ShowMessage(
@@ -78,7 +81,6 @@ class SmileDetectionViewModel(
                                 screenMessage = message
                             )
                         }
-                        setEffect { SmileDetectionContract.SideEffect.Finish }
                     }
                 }
             }
@@ -110,7 +112,6 @@ class SmileDetectionViewModel(
                     "${appContext.packageName}.fileprovider",
                     file
                 )
-                saveUserImage(userId = viewState.value.userId, imageUri = uri)
 
                 withContext(Dispatchers.Main) {
                     setState {
@@ -122,7 +123,7 @@ class SmileDetectionViewModel(
                             message = R.string.authentication_success_message,
                             icon = R.raw.success,
                             positiveAction = {
-                                setEffect { SmileDetectionContract.SideEffect.Finish }
+                                saveUserImage(userId = viewState.value.userId, imageUri = uri)
                             }
                         )
                     }
@@ -158,13 +159,38 @@ class SmileDetectionViewModel(
                             )
                         }
                     }
+
                     is Resource.Loading -> {}
 
                     is Resource.Success -> {
-                        setEffect { SmileDetectionContract.SideEffect.Finish }
+                        getUserDetails(userId)
                     }
                 }
 
+            }
+    }
+
+    private fun getUserDetails(userId: Long) = launchCoroutine(Dispatchers.IO) {
+        getUserDataByUserIdUseCase(input = userId.toInt())
+            .flowOn(Dispatchers.IO)
+            .collectLatest { resource ->
+                when (resource) {
+                    is Resource.Error -> {
+                        setEffect {
+                            ShowMessage(
+                                title = R.string.error_title,
+                                message = R.string.general_error_message,
+                            )
+                        }
+                    }
+
+                    is Resource.Loading -> {
+                    }
+
+                    is Resource.Success -> {
+                        setEffect { SmileDetectionContract.SideEffect.Finish(resource.data) }
+                    }
+                }
             }
     }
 

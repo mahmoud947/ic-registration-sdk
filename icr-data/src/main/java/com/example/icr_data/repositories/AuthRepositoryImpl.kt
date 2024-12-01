@@ -4,10 +4,13 @@ import com.example.icr_data.datasource.local.daos.ICRImageDao
 import com.example.icr_data.datasource.local.daos.ICRUserDao
 import com.example.icr_data.datasource.local.entities.ICRImageEntity
 import com.example.icr_data.datasource.local.entities.ICRUserEntity
+import com.example.icr_data.mapper.EntityToICRImage
 import com.example.icr_data.mapper.ICRImageToEntityMapper
 import com.example.icr_data.mapper.ICRUserToEntityMapper
+import com.example.icr_data.mapper.UserWithImageEntityToDomainMapper
 import com.example.icr_domain.models.ICRImage
 import com.example.icr_domain.models.ICRUser
+import com.example.icr_domain.models.ICRUserWithImage
 import com.example.icr_domain.repositories.AuthRepository
 
 class AuthRepositoryImpl(
@@ -31,6 +34,13 @@ class AuthRepositoryImpl(
 
     override suspend fun deleteImagesByUserId(userId: Int) {
         icrImageDao.deleteImagesByUserId(userId)
+    }
+
+    override suspend fun getUserWithImage(userId: Int): ICRUserWithImage? {
+        val userWithImageEntity = icrUserDao.getUserWithImageByUserId(userId)
+        return userWithImageEntity?.let { entity ->
+            UserWithImageEntityToDomainMapper.map(entity)
+        }
     }
 
 }

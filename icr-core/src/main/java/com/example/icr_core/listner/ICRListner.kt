@@ -1,12 +1,19 @@
 package com.example.icr_core.listner
 
-import com.example.icr_core.error.ICRException
+import com.example.icr_core.base.ICRResult
+import com.example.icr_core.enums.Language
 
-interface ICRSDKListener {
-    fun onValidationSuccess()
+interface ICRSDKCoreListener {
+    fun onValidationSuccess(icrResult: ICRResult)
     fun onValidationFailure(exception: Exception)
 }
 
 object ICRSDKManager {
-    var listener: ICRSDKListener? = null
+    var listener: ICRSDKCoreListener? = null
+    var language: Language? = null
+
+    fun cleanUp() {
+        listener = null
+        language = null
+    }
 }

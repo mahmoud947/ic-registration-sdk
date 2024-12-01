@@ -7,7 +7,7 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <application android:name=".ICRApplicationClass">
         <activity
-            android:name=".ICRActivity"
+            android:name=".ui.ICRActivity"
             android:exported="false"
             android:label="@string/title_activity_icractivity"
             android:theme="@style/Theme.Icregistrationsdk" />

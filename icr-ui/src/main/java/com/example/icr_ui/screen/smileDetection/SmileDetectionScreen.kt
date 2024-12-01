@@ -30,18 +30,20 @@ import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.example.icr_core.base.ICRResult
 import com.example.icr_core.base.OnEffect
 import com.example.icr_core.base.ShowMessage
 import com.example.icr_core.base.ViewSideEffect
-import com.example.icr_core.error.ICRException
 import com.example.icr_core.listner.ICRSDKManager
 import com.example.icr_core.utils.Margin
 import com.example.icr_domain.R
+import com.example.icr_domain.models.ICRUserWithImage
 import com.example.icr_ui.components.ICRBottomSheet
 import com.example.icr_ui.components.ICRCircularCameraPreview
 import com.example.icr_ui.components.ICRLottiAnimation
 import com.example.icr_ui.components.ICRText
 import com.example.icr_ui.theme.medium
+import com.example.icr_ui.utils.toResult
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.launch
@@ -86,7 +88,12 @@ fun SmileDetectionScreen(
     sideEffect.OnEffect { effect ->
         when (effect) {
             is SmileDetectionContract.SideEffect.Finish -> {
-                (context as? ComponentActivity)?.finish()
+                effect.userDetails?.let {
+                    ICRSDKManager.listener?.onValidationSuccess(
+                        it.toResult()
+                    )
+                    (context as? ComponentActivity)?.finish()
+                }
             }
 
             is ShowMessage -> {
@@ -162,3 +169,4 @@ fun SmileDetectionScreen(
 
 
 }
+

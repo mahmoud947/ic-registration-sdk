@@ -2,7 +2,6 @@ package com.example.icr_data.mapper
 
 import com.example.icr_core.base.Mapper
 import com.example.icr_data.datasource.local.entities.ICRImageEntity
-import com.example.icr_data.datasource.local.entities.ICRUserEntity
 import com.example.icr_domain.models.ICRImage
 
 object ICRImageToEntityMapper:Mapper<ICRImage, ICRImageEntity>{

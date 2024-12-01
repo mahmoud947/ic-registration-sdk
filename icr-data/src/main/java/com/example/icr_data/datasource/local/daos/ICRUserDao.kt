@@ -4,7 +4,9 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Transaction
 import com.example.icr_data.datasource.local.entities.ICRUserEntity
+import com.example.icr_data.datasource.local.entities.ICRUserWithImageEntity
 
 @Dao
 interface ICRUserDao {
@@ -22,4 +24,8 @@ interface ICRUserDao {
 
     @Query("DELETE FROM icr_users WHERE id = :id")
     suspend fun deleteUserById(id: Int)
+
+    @Transaction
+    @Query("SELECT * FROM icr_users WHERE id = :userId")
+    suspend fun getUserWithImageByUserId(userId: Int): ICRUserWithImageEntity?
 }
