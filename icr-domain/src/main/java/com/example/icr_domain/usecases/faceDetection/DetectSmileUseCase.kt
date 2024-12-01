@@ -12,11 +12,11 @@ import kotlinx.coroutines.flow.flow
 
 class DetectSmileUseCase(
     private val faceDetectionRepository: FaceDetectionRepository
-) : BaseIOUseCase<Bitmap, Flow<Resource<Int>>> {
-    override fun invoke(input: Bitmap): Flow<Resource<Int>> = flow {
+) : BaseIOUseCase<Bitmap, Flow<Resource<Float>>> {
+    override fun invoke(input: Bitmap): Flow<Resource<Float>> = flow {
         emit(Resource.Loading)
         val smileProbability = faceDetectionRepository.detect(input)
-        val smileProgress = (smileProbability * 100).toInt()
+        val smileProgress = (smileProbability * 100)
         emit(Resource.Success(smileProgress))
     }.catch {
         when (it) {

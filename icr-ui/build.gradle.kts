@@ -72,7 +72,9 @@ dependencies {
     implementation(libs.androidx.camera.mlkit.vision)
     implementation(libs.androidx.camera.extensions)
 
-    implementation ("io.coil-kt:coil:2.6.0")
-    implementation ("io.coil-kt:coil-compose:2.6.0")
+    implementation (libs.coil)
+    implementation (libs.coil.compose)
+    implementation(libs.lottie.compose)
+
 
 }

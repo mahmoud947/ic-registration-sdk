@@ -9,6 +9,6 @@ import org.koin.dsl.module
 
 
 val repositoryModule = module {
-    factory<AuthRepository> { AuthRepositoryImpl(get()) }
+    factory<AuthRepository> { AuthRepositoryImpl(get(), get()) }
     factory<FaceDetectionRepository> { FaceDetectionRepositoryImpl(get()) }
 }

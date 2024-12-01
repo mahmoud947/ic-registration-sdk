@@ -4,6 +4,7 @@ cameraCore = "1.5.0"
 cameraCoreVersion = "1.5.0-alpha03"
 cameraLifecycle = "1.5.0-alpha03"
 cameraView = "1.5.0-alpha03"
+coil = "2.6.0"
 faceDetection = "16.1.7"
 koinAndroid = "3.5.6"
 koinAndroidxCompose = "3.5.0"
@@ -21,6 +22,7 @@ material = "1.12.0"
 uiTooling = "1.7.5"
 roomRuntime = "2.6.1"
 navigationCompose = "2.8.4"
+lottieCompose = "4.0.0"
 
 
 [libraries]
@@ -32,6 +34,8 @@ androidx-camera-mlkit-vision = { module = "androidx.camera:camera-mlkit-vision",
 androidx-camera-video = { module = "androidx.camera:camera-video", version.ref = "cameraCoreVersion" }
 androidx-camera-view-v150alpha03 = { module = "androidx.camera:camera-view", version.ref = "cameraView" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+coil = { module = "io.coil-kt:coil", version.ref = "coil" }
+coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
 face-detection = { module = "com.google.mlkit:face-detection", version.ref = "faceDetection" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
@@ -56,9 +60,12 @@ ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling", version.ref =
 androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "roomRuntime" }
 androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "roomRuntime" }
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "roomRuntime" }
+lottie-compose = { module = "com.airbnb.android:lottie-compose", version.ref = "lottieCompose" }
+
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 android-library = { id = "com.android.library", version.ref = "agp" }
+
 

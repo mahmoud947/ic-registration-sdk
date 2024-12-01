@@ -5,5 +5,13 @@
     <string name="invalid_email_format">Invalid email format</string>
     <string name="passwords_do_not_match">Passwords do not match</string>
     <string name="invalid_phone_number">Invalid phone number</string>
+    <string name="center_face_message">Please center your face inside the circle 😊</string>
+    <string name="start_smile_message">Give us your best smile to light up the screen! 😁</string>
+    <string name="greet_smile_message">What a great smile! You’re amazing! 😄</string>
+    <string name="ok">OK</string>
+    <string name="general_error_message">Something went wrong. We promise to fix it soon! 😊</string>
+    <string name="error_title">Oops! Something Went Wrong</string>
+    <string name="authentication_success_message">Authentication successful! Welcome aboard! 🎉</string>
+    <string name="successfully">Success!</string>
 
 </resources>

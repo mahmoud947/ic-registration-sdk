@@ -1,21 +1,25 @@
 package com.example.icr_ui.screen.smileDetection
 
 import android.app.Application
-import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Matrix
-import android.net.Uri
 import androidx.core.content.FileProvider
 import com.example.icr_core.base.ICRApplicationViewModel
 import com.example.icr_core.base.Resource
+import com.example.icr_core.base.ShowMessage
+import com.example.icr_core.error.NoFaceDetectedException
 import com.example.icr_domain.usecases.faceDetection.DetectSmileUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.withContext
-import okio.IOException
 import java.io.File
 import java.io.FileOutputStream
+import com.example.icr_domain.R
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.distinctUntilChanged
+import java.io.IOException
 
 class SmileDetectionViewModel(
     private val detectSmileUseCase: DetectSmileUseCase,
@@ -32,21 +36,49 @@ class SmileDetectionViewModel(
         }
     }
 
+    @OptIn(FlowPreview::class)
     private fun detectSmile(bitmap: Bitmap) = launchCoroutine(Dispatchers.Default) {
-        detectSmileUseCase(bitmap).flowOn(Dispatchers.Default)
+        detectSmileUseCase(bitmap)
+            .flowOn(Dispatchers.Default)
+            .distinctUntilChanged()
+            .debounce(400)
             .collectLatest { resource ->
                 when (resource) {
                     is Resource.Error -> {
-                        setState { copy(loading = false) }
+                        when (resource.exception) {
+                            is NoFaceDetectedException -> {
+                                setState {
+                                    copy(screenMessage = R.string.center_face_message)
+                                }
+                            }
+
+                            else -> {
+                                setEffect {
+                                    ShowMessage(
+                                        title = R.string.error_title,
+                                        message = R.string.general_error_message,
+                                    )
+                                }
+
+                            }
+                        }
                     }
 
                     is Resource.Loading -> {
-                        setState { copy(loading = true) }
+
                     }
 
                     is Resource.Success -> {
-                        setState { copy(loading = false, smileProgress = resource.data) }
-                        setEffect { SmileDetectionContract.SideEffect.NavigateToNextScreen }
+                        val message =
+                            if (resource.data != 0f) R.string.start_smile_message else null
+                        setState {
+                            copy(
+                                loading = false,
+                                smileProgress = resource.data.toInt(),
+                                screenMessage = message
+                            )
+                        }
+                        setEffect { SmileDetectionContract.SideEffect.Finish }
                     }
                 }
             }
@@ -55,6 +87,9 @@ class SmileDetectionViewModel(
     fun saveBitmapToNonMediaStorage(bitmap: Bitmap) {
         launchCoroutine(Dispatchers.IO) {
             try {
+                setState {
+                    copy(loading = true)
+                }
                 val rotatedBitmap = rotateBitmap(bitmap, -90f)
                 val directory = File(appContext.filesDir, "SmileDetection")
                 if (!directory.exists() && !directory.mkdirs()) {
@@ -78,18 +113,32 @@ class SmileDetectionViewModel(
 
                 withContext(Dispatchers.Main) {
                     setState {
-                        copy(imageUri = uri)
+                        copy(stopSmileDetection = true, imageUri = uri, loading = false)
+                    }
+                    setEffect {
+                        ShowMessage(
+                            title = R.string.successfully,
+                            message = R.string.authentication_success_message,
+                            icon = R.raw.success,
+                            positiveAction = {
+                                setEffect { SmileDetectionContract.SideEffect.Finish }
+                            }
+                        )
                     }
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
                 withContext(Dispatchers.Main) {
-                   // setEffect { SmileDetectionContract.SideEffect.NavigateToNextScreen }
+                    setEffect {
+                        ShowMessage(
+                            title = R.string.error_title,
+                            message = R.string.general_error_message,
+                        )
+                    }
                 }
             }
         }
     }
-
 
 
     private fun rotateBitmap(bitmap: Bitmap, rotationDegrees: Float): Bitmap {

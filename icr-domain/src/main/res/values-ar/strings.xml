@@ -1,8 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-    <resources>
-        <string name="this_field_can_not_be_empty">لا يمكن أن يكون هذا الحقل فارغاً</string>
-        <string name="password_cant_be_less_6_chars">كلمة المرور لا يمكن أن تكون أقل من 6 أحرف</string>
-        <string name="invalid_email_format">تنسيق البريد الإلكتروني غير صحيح</string>
-        <string name="passwords_do_not_match">كلمتا المرور غير متطابقتين</string>
-        <string name="invalid_phone_number">رقم الهاتف غير صحيح</string>
-    </resources>
+<resources>
+    <string name="this_field_can_not_be_empty">لا يمكن أن يكون هذا الحقل فارغاً</string>
+    <string name="password_cant_be_less_6_chars">كلمة المرور لا يمكن أن تكون أقل من 6 أحرف</string>
+    <string name="invalid_email_format">تنسيق البريد الإلكتروني غير صحيح</string>
+    <string name="passwords_do_not_match">كلمتا المرور غير متطابقتين</string>
+    <string name="invalid_phone_number">رقم الهاتف غير صحيح</string>
+    <string name="center_face_message">يرجى وضع وجهك في منتصف الدائرة 😊</string>
+    <string name="start_smile_message">أظهر لنا أجمل ابتسامة لتضيء الشاشة! 😁</string>
+    <string name="greet_smile_message">يا لها من ابتسامة رائعة! أنت مذهل! 😄</string>
+    <string name="ok">حسنًا</string>
+    <string name="general_error_message">حدث خطأ ما. نعدك بأن نصلحه قريبًا! 😊</string>
+    <string name="error_title">عذرًا! حدث خطأ ما</string>
+    <string name="authentication_success_message">تم التحقق بنجاح! مرحبًا بك معنا! 🎉</string>
+    <string name="successfully">تم بنجاح!</string>
+</resources>

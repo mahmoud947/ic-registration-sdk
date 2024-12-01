@@ -2,6 +2,7 @@ package com.example.icr_di
 
 import com.example.icr_domain.usecases.user.InsertNewUserUseCase
 import com.example.icr_domain.usecases.faceDetection.DetectSmileUseCase
+import com.example.icr_domain.usecases.user.InsertUserImageUseCase
 import com.example.icr_domain.usecases.validation.FormValidationUseCase
 import com.example.icr_domain.usecases.validation.ValidateConfirmPasswordUseCase
 import com.example.icr_domain.usecases.validation.ValidateEmailUseCase
@@ -19,4 +20,5 @@ val useCaseModule = module {
     factory<ValidateConfirmPasswordUseCase> { ValidateConfirmPasswordUseCase() }
     factory<FormValidationUseCase> { FormValidationUseCase(get(), get(), get(), get(), get()) }
     factory<DetectSmileUseCase> { DetectSmileUseCase(get()) }
+    factory<InsertUserImageUseCase> { InsertUserImageUseCase(get()) }
 }
