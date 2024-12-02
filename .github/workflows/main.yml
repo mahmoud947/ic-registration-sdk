@@ -1,10 +1,10 @@
-name: Push to JitPack
+name: Auto Increment and Push to JitPack
 
 on:
   push:
     branches:
-      - master # Trigger on pushes to the master branch
-  workflow_dispatch: # Allow manual triggering of the workflow
+      - master
+  workflow_dispatch:
 
 jobs:
   build-and-push:
@@ -34,39 +34,47 @@ jobs:
         git config user.name "Mahmoud"
         git config user.email "mahmoudkamal4673@gmail.com"
 
-    # Step 5: Build and Publish Locally
-    - name: Build and Publish Locally
-      run: ./gradlew clean publishToMavenLocal
-
-    # Step 6: Extract Version from Gradle
-    - name: Extract Version
-      id: extract_version
+    # Step 5: Determine Next Version
+    - name: Get Latest Tag and Increment Version
+      id: versioning
       run: |
-        VERSION=$(./gradlew properties -q | grep "^version:" | awk '{print $2}')
-        echo "Version: $VERSION"
-        echo "version=$VERSION" >> $GITHUB_ENV
+        # Get the latest tag
+        LATEST_TAG=$(git describe --tags $(git rev-list --tags --max-count=1) || echo "v0.0.0")
+        echo "Latest tag: $LATEST_TAG"
 
-    # Step 7: Create and Push Git Tag
+        # Extract major, minor, and patch versions
+        VERSION=${LATEST_TAG#v}
+        IFS='.' read -r MAJOR MINOR PATCH <<< "$VERSION"
+
+        # Increment the patch version
+        PATCH=$((PATCH + 1))
+        NEW_VERSION="v$MAJOR.$MINOR.$PATCH"
+        echo "New version: $NEW_VERSION"
+
+        # Export the new version
+        echo "version=$NEW_VERSION" >> $GITHUB_ENV
+
+    # Step 6: Create and Push Git Tag
     - name: Create and Push Tag
       run: |
-        git tag -a v${{ env.version }} -m "Release v${{ env.version }}"
-        git push origin v${{ env.version }}
+        git tag -a ${{ env.version }} -m "Release ${{ env.version }}"
+        git push origin ${{ env.version }}
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-    # Step 8: Create GitHub Release
+    # Step 7: Create GitHub Release
     - name: Create GitHub Release
       uses: actions/create-release@v1
       with:
-        tag_name: v${{ env.version }}
-        release_name: "Release v${{ env.version }}"
-        body: "This is an automatic release for version v${{ env.version }}."
+        tag_name: ${{ env.version }}
+        release_name: "Release ${{ env.version }}"
+        body: "This is an automatic release for version ${{ env.version }}."
         draft: false
         prerelease: false
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-    # Step 9: Trigger Build on JitPack
+    # Step 8: Trigger Build on JitPack
     - name: Trigger Build on JitPack
       run: |
-        echo "Build triggered for tag: v${{ env.version }}"
+        echo "Build triggered for tag: ${{ env.version }}"
