@@ -32,6 +32,7 @@ class MainActivity : ComponentActivity() {
                 lightTertiary = Color.DarkGray,
                 lightBackground = Color.White
             )
+            .setAutoCapture(true)
             .context(this.applicationContext).build()
         enableEdgeToEdge()
         setContent {
