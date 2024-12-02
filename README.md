@@ -53,7 +53,7 @@ repositories {
 Then, add the SDK dependency to the module-level build.gradle file:
 
 ```gradle
-//last_version: 1.7.3-alpha
+//last_version: 1.7.4-alpha
 implementation 'com.github.mahmoud947.ic-registration-sdk:icr-sdk:last_version'
 ```
 
