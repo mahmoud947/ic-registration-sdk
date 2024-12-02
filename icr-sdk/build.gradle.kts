@@ -77,3 +77,17 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 }
+
+afterEvaluate {
+    publishing {
+        publications {
+            create<MavenPublication>("release") {
+                from(components["release"])
+
+                groupId = "com.github.mahmoud947"
+                artifactId = "ic-registration-sdk"
+                version = "1.1.0"
+            }
+        }
+    }
+}
