@@ -7,6 +7,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -40,15 +41,16 @@ import com.example.icr_sdk.module.ICRSdkResult
 import com.example.icr_sdk.utils.ICRLanguage
 import com.example.icr_sdk.utils.ICRSDKListener
 
+
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val icrsdk = ICRSDK
             .Builder()
-            .setLanguage(ICRLanguage.ARABIC)
+            .setLanguage(ICRLanguage.ENGLISH)
             .setDarkMode(false)
             .setLightThemeColors(
-                lightPrimary = Color.Red,
+                lightPrimary = Color.Blue.copy(alpha = 0.7f),
                 lightSecondary = Color.Green,
                 lightTertiary = Color.DarkGray,
                 lightBackground = Color.White
@@ -65,7 +67,9 @@ class MainActivity : ComponentActivity() {
                     Column(
                         modifier = Modifier
                             .fillMaxSize()
-                            .padding(innerPadding)
+                            .padding(innerPadding),
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         result?.let {
                             UserDetailsScreen(icrSdkResult = it, modifier = Modifier)
