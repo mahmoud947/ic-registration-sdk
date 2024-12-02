@@ -1,3 +1,5 @@
+import org.gradle.kotlin.dsl.from
+
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
@@ -85,8 +87,8 @@ afterEvaluate {
                 from(components["release"])
 
                 groupId = "com.github.mahmoud947"
-                artifactId = "ic-registration-sdk"
-                version = "1.1.0"
+                artifactId = project.name
+                version = "1.6.0alpha"
             }
         }
     }

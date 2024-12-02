@@ -1,3 +1,5 @@
+import org.gradle.kotlin.dsl.from
+
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
@@ -56,4 +58,18 @@ dependencies {
     annotationProcessor(libs.androidx.room.compiler)
     implementation(libs.androidx.room.ktx)
     ksp(libs.androidx.room.compiler)
+}
+
+afterEvaluate {
+    publishing {
+        publications {
+            create<MavenPublication>("release") {
+                from(components["release"])
+
+                groupId = "com.github.mahmoud947"
+                artifactId = project.name
+                version = "1.6.0alpha"
+            }
+        }
+    }
 }
