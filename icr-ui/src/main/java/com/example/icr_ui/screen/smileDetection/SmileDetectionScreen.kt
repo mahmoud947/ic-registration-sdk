@@ -16,7 +16,6 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -109,8 +108,12 @@ fun SmileDetectionScreen(
                 }
             }
 
-            SmileDetectionContract.SideEffect.Cancel -> {
+            is SmileDetectionContract.SideEffect.Cancel -> {
                 ICRSDKManager.listener?.onCancelByUser()
+                (context as? ComponentActivity)?.finish()
+            }
+
+            is SmileDetectionContract.SideEffect.Exit -> {
                 (context as? ComponentActivity)?.finish()
             }
         }

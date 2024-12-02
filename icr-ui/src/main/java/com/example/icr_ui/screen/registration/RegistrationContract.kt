@@ -13,10 +13,13 @@ class RegistrationContract {
         data class OnPasswordChange(val password: String) : Event()
         data class OnConfirmPasswordChange(val confirmPassword: String) : Event()
         data object OnNextClick : Event()
+        data object OnCancel : Event()
     }
 
     sealed class SideEffect : ViewSideEffect {
         data class NavigateToNextScreen(val userId: Long) : SideEffect()
+        data object Exit: SideEffect()
+        data object Cancel: SideEffect()
     }
 
     data class State(

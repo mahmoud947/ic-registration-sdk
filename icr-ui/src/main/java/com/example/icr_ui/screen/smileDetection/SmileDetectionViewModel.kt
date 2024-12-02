@@ -237,4 +237,23 @@ class SmileDetectionViewModel(
     }
 
 
+    override fun handleCoroutineException(exception: Throwable) {
+        super.handleCoroutineException(exception)
+        setState { copy(loading = false) }
+        setEffect {
+            ShowMessage(
+                title = R.string.error_title,
+                message = R.string.general_error_message,
+                positiveAction = {
+                    ICRSDKManager.listener?.onValidationFailure(
+                        Exception("Exception in SmileDetectionViewModel")
+                    )
+                    setEffect {
+                        SmileDetectionContract.SideEffect.Exit
+                    }
+                }
+            )
+        }
+    }
+
 }

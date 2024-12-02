@@ -20,6 +20,7 @@ class SmileDetectionContract {
     sealed class SideEffect : ViewSideEffect {
         data class Finish(val userDetails: ICRUserWithImage?) : SideEffect()
         data object Cancel: SideEffect()
+        data object Exit: SideEffect()
     }
 
     data class State(

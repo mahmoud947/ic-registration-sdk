@@ -1,5 +1,7 @@
 package com.example.icr_ui.screen.registration
 
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -8,6 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -20,6 +23,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -29,6 +33,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.icr_core.base.OnEffect
 import com.example.icr_core.base.ShowMessage
 import com.example.icr_core.base.ViewSideEffect
+import com.example.icr_core.listner.ICRSDKManager
 import com.example.icr_core.utils.Margin
 import com.example.icr_domain.R
 import com.example.icr_ui.components.ICRBottomSheet
@@ -63,6 +68,10 @@ fun RegistrationScreen(
         skipPartiallyExpanded = true
     )
 
+    var isDialogVisible by remember { mutableStateOf(false) }
+
+    val context = LocalContext.current
+
     sideEffect.OnEffect { effect ->
         when (effect) {
             is ShowMessage -> {
@@ -71,8 +80,8 @@ fun RegistrationScreen(
                     bottomSheetSate.show()
                     isBottomSheetOpen = true
                 }
-
             }
+
             is RegistrationContract.SideEffect.NavigateToNextScreen->{
                 navController.navigate(ICRScreen.SmileDetection.createRoute(effect.userId)){
                     popUpTo(ICRScreen.Registration.route){
@@ -80,8 +89,20 @@ fun RegistrationScreen(
                     }
                 }
             }
+
+            is RegistrationContract.SideEffect.Exit -> {
+                (context as? ComponentActivity)?.finish()
+            }
+            is RegistrationContract.SideEffect.Cancel -> {
+                ICRSDKManager.listener?.onCancelByUser()
+                (context as? ComponentActivity)?.finish()
+            }
         }
     }
+    BackHandler {
+        isDialogVisible = true
+    }
+
     Scaffold { innerPadding ->
         Column(
             modifier = modifier
@@ -229,6 +250,30 @@ fun RegistrationScreen(
                 }
             )
         }
+    }
+
+    if (isDialogVisible) {
+        AlertDialog(
+            onDismissRequest = { isDialogVisible = false },
+            title = { ICRText(text = stringResource(R.string.confirm_exit_title)) },
+            text = { ICRText(text = stringResource(R.string.confirm_exit_message)) },
+            confirmButton = {
+                ICRFlatButton(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = stringResource(R.string.yes),
+                    onClick = {
+                        isDialogVisible = false
+                        onEvent(RegistrationContract.Event.OnCancel)
+                    })
+            },
+            dismissButton = {
+                ICRFlatButton(
+                    modifier = Modifier.fillMaxWidth(),
+                    onClick = { isDialogVisible = false },
+                    text = stringResource(R.string.no)
+                )
+            }
+        )
     }
 }
 

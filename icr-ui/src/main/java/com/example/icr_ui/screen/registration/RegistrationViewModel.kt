@@ -27,6 +27,7 @@ class RegistrationViewModel(
             is RegistrationContract.Event.OnPasswordChange -> onPasswordChange(event.password)
             is RegistrationContract.Event.OnPhoneNumberChange -> onPhoneNumberChange(event.phoneNumber)
             is RegistrationContract.Event.OnUsernameChange -> onUsernameChange(event.username)
+            is RegistrationContract.Event.OnCancel -> setEffect { RegistrationContract.SideEffect.Cancel }
         }
     }
 
@@ -139,6 +140,25 @@ class RegistrationViewModel(
 
     private fun onConfirmPasswordChange(password: String) {
         setState { copy(confirmPassword = password) }
+    }
+
+    override fun handleCoroutineException(exception: Throwable) {
+        super.handleCoroutineException(exception)
+        setState { copy(loading = false) }
+        setEffect {
+            ShowMessage(
+                title = com.example.icr_domain.R.string.error_title,
+                message = com.example.icr_domain.R.string.general_error_message,
+                positiveAction = {
+                    ICRSDKManager.listener?.onValidationFailure(
+                        Exception("Exception in RegistrationViewModel")
+                    )
+                    setEffect {
+                        RegistrationContract.SideEffect.Exit
+                    }
+                }
+            )
+        }
     }
 
 }
