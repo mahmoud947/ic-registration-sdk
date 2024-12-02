@@ -37,7 +37,11 @@ jobs:
     - name: Get Current Tag
       id: get_tag
       run: |
-        CURRENT_TAG=$(git describe --tags)
+        CURRENT_TAG=$(git tag --points-at HEAD)
+        if [ -z "$CURRENT_TAG" ]; then
+          echo "No tag found for this commit."
+          exit 1
+        fi
         echo "Current tag: $CURRENT_TAG"
         echo "tag=$CURRENT_TAG" >> $GITHUB_ENV
 
