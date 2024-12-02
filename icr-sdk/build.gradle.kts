@@ -78,7 +78,6 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
 }
 
-
 afterEvaluate {
     publishing {
         publications {
