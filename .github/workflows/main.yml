@@ -3,7 +3,7 @@ name: Push to JitPack
 on:
   push:
     branches:
-      - master # Trigger on pushes to the main branch
+      - master # Trigger on pushes to the master branch
   workflow_dispatch: # Allow manual triggering of the workflow
 
 jobs:
@@ -11,46 +11,50 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    # Checkout the repository
+    # Step 1: Checkout the repository
     - name: Checkout Repository
       uses: actions/checkout@v3
 
-    # Set up Java 17
+    # Step 2: Set up Java 17
     - name: Set up Java 17
       uses: actions/setup-java@v3
       with:
         java-version: '17'
         distribution: 'temurin'
 
-    # Set up Gradle
+    # Step 3: Set up Gradle
     - name: Set up Gradle
       uses: gradle/gradle-build-action@v2
       with:
         gradle-version: 8.9
 
-    # Build and publish to Maven Local (for verification)
+    # Step 4: Configure Git (Fix for missing user.name and user.email)
+    - name: Configure Git
+      run: |
+        git config user.name "Mahmoud"
+        git config user.email "mahmoudkamal4673@gmail.com"
+
+    # Step 5: Build and publish to Maven Local (for verification)
     - name: Build and Publish Locally
       run: ./gradlew clean publishToMavenLocal
 
-    # Create a Git Tag for Release
-    - name: Create Git Tag
-      id: create_tag
+    # Step 6: Extract Version from Gradle
+    - name: Extract Version
+      id: extract_version
       run: |
-        VERSION=$(./gradlew properties -q | grep "version:" | awk '{print $2}')
+        VERSION=$(./gradlew properties -q | grep "^version:" | awk '{print $2}')
         echo "Version: $VERSION"
-        echo "::set-output name=version::$VERSION"
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        echo "version=$VERSION" >> $GITHUB_ENV
 
-    # Push the tag to the repository
-    - name: Push Tag to GitHub
+    # Step 7: Create and Push Git Tag
+    - name: Create and Push Tag
       run: |
-        git tag -a v${{ steps.create_tag.outputs.version }} -m "Release v${{ steps.create_tag.outputs.version }}"
-        git push origin v${{ steps.create_tag.outputs.version }}
+        git tag -a v${{ env.version }} -m "Release v${{ env.version }}"
+        git push origin v${{ env.version }}
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-    # Trigger Build on JitPack
+    # Step 8: Trigger Build on JitPack
     - name: Trigger Build on JitPack
       run: |
-        echo "Build triggered for tag: v${{ steps.create_tag.outputs.version }}"
+        echo "Build triggered for tag: v${{ env.version }}"
