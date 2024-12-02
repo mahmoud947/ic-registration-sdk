@@ -110,6 +110,7 @@ class MainActivity : ComponentActivity() {
 }
 
 
+
 @Composable
 fun UserDetailsScreen(icrSdkResult: ICRSdkResult,modifier: Modifier = Modifier) {
         Column(
