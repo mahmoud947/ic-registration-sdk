@@ -28,13 +28,13 @@ jobs:
       with:
         gradle-version: 8.9
 
-    # Step 4: Configure Git (Fix for missing user.name and user.email)
+    # Step 4: Configure Git
     - name: Configure Git
       run: |
         git config user.name "Mahmoud"
         git config user.email "mahmoudkamal4673@gmail.com"
 
-    # Step 5: Build and publish to Maven Local (for verification)
+    # Step 5: Build and Publish Locally
     - name: Build and Publish Locally
       run: ./gradlew clean publishToMavenLocal
 
@@ -54,7 +54,19 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-    # Step 8: Trigger Build on JitPack
+    # Step 8: Create GitHub Release
+    - name: Create GitHub Release
+      uses: actions/create-release@v1
+      with:
+        tag_name: v${{ env.version }}
+        release_name: "Release v${{ env.version }}"
+        body: "This is an automatic release for version v${{ env.version }}."
+        draft: false
+        prerelease: false
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    # Step 9: Trigger Build on JitPack
     - name: Trigger Build on JitPack
       run: |
         echo "Build triggered for tag: v${{ env.version }}"
