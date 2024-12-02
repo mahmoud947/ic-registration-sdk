@@ -53,6 +53,7 @@ class ICRSDK private constructor() {
         private var lightSecondary: Color? = null
         private var lightTertiary: Color? = null
         private var lightBackground: Color? = null
+        private var isAutoCapture: Boolean = true
 
         fun context(context: Context): Builder {
             this.context = context
@@ -71,6 +72,12 @@ class ICRSDK private constructor() {
         fun setDarkMode(isDarkMode: Boolean): Builder {
             this.isDarkMode = isDarkMode
             ICRSDKManager.isDarkMode = isDarkMode
+            return this
+        }
+
+        fun setAutoCapture(isAutoCapture: Boolean): Builder {
+            this.isAutoCapture = isAutoCapture
+            ICRSDKManager.isAutoCapture = isAutoCapture
             return this
         }
 
@@ -109,7 +116,6 @@ class ICRSDK private constructor() {
         }
 
         fun build(): ICRSDK {
-            // You can add validations or default settings here if needed
             return ICRSDK()
         }
     }

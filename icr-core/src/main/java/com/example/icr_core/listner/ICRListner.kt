@@ -25,4 +25,6 @@ object ICRSDKManager {
     var lightSecondary: Color? = null
     var lightTertiary: Color? = null
     var lightBackground: Color? = null
+
+    var isAutoCapture: Boolean = true
 }

@@ -132,6 +132,9 @@ fun SmileDetectionScreen(
                 imageUri = uiState.imageUri,
                 onSmileDetected = {
                     onEvent(SmileDetectionContract.Event.SaveImage(it))
+                },
+                onManualCapture = {
+                    onEvent(SmileDetectionContract.Event.SaveImage(it))
                 }
             ) { bitmap ->
                 onEvent(SmileDetectionContract.Event.OnStartSmileDetection(bitmap))

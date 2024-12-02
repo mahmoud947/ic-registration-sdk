@@ -27,4 +27,6 @@
     <string name="password">كلمة المرور</string>
     <string name="confirm_password">تأكيد كلمة المرور</string>
     <string name="next">التالي</string>
+    <string name="capture">التقاط</string>
+
 </resources>
