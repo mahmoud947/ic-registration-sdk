@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -26,6 +27,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -125,6 +129,7 @@ fun RegistrationScreen(
             )
             Margin(extraLarge)
             ICROutlinedTextField(
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
                 modifier = Modifier.fillMaxWidth(),
                 value = uiState.username,
                 onValueChange = { onEvent(RegistrationContract.Event.OnUsernameChange(it)) },
@@ -142,6 +147,7 @@ fun RegistrationScreen(
             )
             Margin(extraSmall)
             ICROutlinedTextField(
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
                 modifier = Modifier.fillMaxWidth(),
                 value = uiState.phoneNumber,
                 onValueChange = { onEvent(RegistrationContract.Event.OnPhoneNumberChange(it)) },
@@ -160,6 +166,7 @@ fun RegistrationScreen(
 
             Margin(extraSmall)
             ICROutlinedTextField(
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
                 modifier = Modifier.fillMaxWidth(),
                 value = uiState.email,
                 onValueChange = { onEvent(RegistrationContract.Event.OnEmailChange(it)) },
@@ -178,6 +185,8 @@ fun RegistrationScreen(
 
             Margin(extraSmall)
             ICROutlinedTextField(
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                visualTransformation =  PasswordVisualTransformation(),
                 modifier = Modifier.fillMaxWidth(),
                 value = uiState.password,
                 onValueChange = { onEvent(RegistrationContract.Event.OnPasswordChange(it)) },
@@ -196,6 +205,8 @@ fun RegistrationScreen(
 
             Margin(extraSmall)
             ICROutlinedTextField(
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                visualTransformation =  PasswordVisualTransformation(),
                 modifier = Modifier.fillMaxWidth(),
                 value = uiState.confirmPassword,
                 onValueChange = { onEvent(RegistrationContract.Event.OnConfirmPasswordChange(it)) },

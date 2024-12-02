@@ -5,12 +5,25 @@ import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import com.example.ic_registration_sdk.ui.theme.IcregistrationsdkTheme
@@ -18,6 +31,16 @@ import com.example.icr_sdk.*
 import com.example.icr_sdk.module.ICRSdkResult
 import com.example.icr_sdk.utils.ICRLanguage
 import com.example.icr_sdk.utils.ICRSDKListener
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import coil.compose.rememberAsyncImagePainter
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,19 +59,25 @@ class MainActivity : ComponentActivity() {
             .context(this.applicationContext).build()
         enableEdgeToEdge()
         setContent {
+            var result by remember {
+                mutableStateOf<ICRSdkResult?>(null)
+            }
             IcregistrationsdkTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     Column(
-                        modifier = Modifier.padding(innerPadding)
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(innerPadding)
                     ) {
+                        result?.let {
+                            UserDetailsScreen(icrSdkResult = it, modifier = Modifier)
+                        }
+
+
                         Button(onClick = {
                             icrsdk.validateNewUser(this@MainActivity, object : ICRSDKListener {
                                 override fun onValidationSuccess(user: ICRSdkResult) {
-                                    Toast.makeText(
-                                        this@MainActivity,
-                                        user.toString(),
-                                        Toast.LENGTH_SHORT
-                                    ).show()
+                                    result = user
                                 }
 
                                 override fun onValidationFailure(exception: Exception) {
@@ -69,11 +98,83 @@ class MainActivity : ComponentActivity() {
 
                             })
                         }) {
-                            Text(text = "Insert User")
+                            Text(text = "Vilify new user")
                         }
                     }
                 }
             }
         }
+    }
+}
+
+
+@Composable
+fun UserDetailsScreen(icrSdkResult: ICRSdkResult,modifier: Modifier = Modifier) {
+        Column(
+            modifier = modifier
+                .fillMaxSize()
+                .padding(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            // Profile Image
+            if (icrSdkResult.imageUri != null) {
+                Image(
+                    painter = rememberAsyncImagePainter(model = icrSdkResult.imageUri),
+                    contentDescription = "Profile Picture",
+                    modifier = Modifier
+                        .size(100.dp)
+                        .clip(CircleShape),
+                    contentScale = ContentScale.Crop
+                )
+            } else {
+                Box(
+                    modifier = Modifier
+                        .size(100.dp)
+                        .clip(CircleShape)
+                        .background(
+                            brush = Brush.verticalGradient(
+                                colors = listOf(
+                                    MaterialTheme.colorScheme.primary,
+                                    MaterialTheme.colorScheme.secondary
+                                )
+                            )
+                        ),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = icrSdkResult.userName.take(1).uppercase(),
+                        fontSize = 36.sp,
+                        color = Color.White,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            UserDetailsItem(label = "User ID", value = icrSdkResult.userId.toString())
+            UserDetailsItem(label = "Username", value = icrSdkResult.userName)
+            UserDetailsItem(label = "Email", value = icrSdkResult.email)
+            UserDetailsItem(label = "Phone Number", value = icrSdkResult.phoneNumber)
+            UserDetailsItem(label = "Password", value = icrSdkResult.password)
+        }
+
+}
+
+@Composable
+fun UserDetailsItem(label: String, value: String) {
+    Column(modifier = Modifier.padding(vertical = 8.dp)) {
+        Text(
+            text = label,
+            fontSize = 14.sp,
+            color = Color.Gray,
+            fontWeight = FontWeight.Bold
+        )
+        Text(
+            text = value,
+            fontSize = 16.sp,
+            color = MaterialTheme.colorScheme.onSurface,
+            fontWeight = FontWeight.Medium
+        )
     }
 }
