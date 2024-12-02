@@ -45,7 +45,6 @@ fun ICRCircularCameraPreview(
     onSmileDetected: (Bitmap) -> Unit = {},
     onFrameCaptured: (Bitmap) -> Unit
 ) {
-
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
     val cameraProviderFuture = remember { ProcessCameraProvider.getInstance(context) }
