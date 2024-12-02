@@ -1,10 +1,9 @@
-name: Automatic Tagging and Push to JitPack
+name: Trigger Build on Manual Tagging
 
 on:
-  # Trigger the workflow on tag push
   push:
     tags:
-      - 'v*' # Only run for tags starting with 'v'
+      - 'v*' # Trigger only when a tag starting with 'v' is pushed
 
 jobs:
   build-and-push:
@@ -34,19 +33,27 @@ jobs:
         git config user.name "Mahmoud"
         git config user.email "mahmoudkamal4673@gmail.com"
 
-    # Step 5: Create GitHub Release
+    # Step 5: Get the Current Tag
+    - name: Get Current Tag
+      id: get_tag
+      run: |
+        CURRENT_TAG=$(git describe --tags)
+        echo "Current tag: $CURRENT_TAG"
+        echo "tag=$CURRENT_TAG" >> $GITHUB_ENV
+
+    # Step 6: Create GitHub Release
     - name: Create GitHub Release
       uses: actions/create-release@v1
       with:
-        tag_name: ${{ github.ref_name }}
-        release_name: "Release ${{ github.ref_name }}"
-        body: "This is an automatic release for version ${{ github.ref_name }}."
+        tag_name: ${{ env.tag }}
+        release_name: "Release ${{ env.tag }}"
+        body: "This is an automatic release for version ${{ env.tag }}."
         draft: false
         prerelease: false
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-    # Step 6: Trigger Build on JitPack
+    # Step 7: Trigger Build on JitPack
     - name: Trigger Build on JitPack
       run: |
-        echo "Build triggered for tag: ${{ github.ref_name }}"
+        echo "Build triggered for tag: ${{ env.tag }}"
