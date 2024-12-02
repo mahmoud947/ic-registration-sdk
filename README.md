@@ -53,6 +53,7 @@ repositories {
 Then, add the SDK dependency to the module-level build.gradle file:
 
 ```gradle
+//last_version: 1.7.3-alpha
 implementation 'com.github.mahmoud947.ic-registration-sdk:icr-sdk:last_version'
 ```
 
@@ -177,10 +178,19 @@ icrSdk.validateNewUser(context = this, listener = object : ICRSDKListener {
 })
 ```
 
----
 
-## Video Guide
 
-Check out our video guide for a step-by-step walkthrough of the SDK:  
+## Image 
+| Image 1        | Image 2        | Image 3        |
+|-----------------|----------------|----------------|
+| ![WhatsApp Image 2024-12-02 at 15 32 16](https://github.com/user-attachments/assets/36283542-e0c0-43d1-803a-d90ab8e27894) | ![WhatsApp Image 2024-12-02 at 15 32 166](https://github.com/user-attachments/assets/8b9c3c13-165d-43f9-b338-9a678d8ac7e8) | ![WhatsApp Image 2024-12-02 at 15 32 15](https://github.com/user-attachments/assets/aa18a4c4-fe31-42e4-bb88-09a545d8569a) |
+
+
+## Video 
+
+
+
+https://github.com/user-attachments/assets/521e5d25-f371-4ace-9681-c933754ef07d
+
 
 
