@@ -13,5 +13,6 @@
     <string name="error_title">Oops! Something Went Wrong</string>
     <string name="authentication_success_message">Authentication successful! Welcome aboard! 🎉</string>
     <string name="successfully">Success!</string>
+    <string name="cancel">Cancel</string>
 
 </resources>

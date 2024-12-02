@@ -31,6 +31,10 @@ class ICRSDK private constructor() {
             override fun onValidationFailure(exception: Exception) {
                 listener.onValidationFailure(exception)
             }
+
+            override fun onCancelByUser() {
+                listener.onCancelByTheUser()
+            }
         }
         context.startActivity(intent)
     }

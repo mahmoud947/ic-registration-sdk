@@ -100,7 +100,7 @@ class SmileDetectionViewModel(
                 setState {
                     copy(loading = true)
                 }
-                val rotatedBitmap = bitmap.rotateBitmap(90f)
+                val rotatedBitmap = bitmap.rotateBitmap(-90f)
                 val directory = File(appContext.filesDir, "SmileDetection")
                 if (!directory.exists() && !directory.mkdirs()) {
                     throw IOException("Failed to create directory: ${directory.absolutePath}")

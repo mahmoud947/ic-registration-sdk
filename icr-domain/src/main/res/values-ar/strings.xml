@@ -13,4 +13,5 @@
     <string name="error_title">عذرًا! حدث خطأ ما</string>
     <string name="authentication_success_message">تم التحقق بنجاح! مرحبًا بك معنا! 🎉</string>
     <string name="successfully">تم بنجاح!</string>
+    <string name="cancel">الغاء</string>
 </resources>

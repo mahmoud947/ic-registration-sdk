@@ -50,7 +50,11 @@ class RegistrationViewModel(
                                     title = com.example.icr_domain.R.string.error_title,
                                     message = com.example.icr_domain.R.string.general_error_message,
                                     positiveAction = {
-                                        ICRSDKManager.listener?.onValidationFailure(Exception(resource.exception))
+                                        ICRSDKManager.listener?.onValidationFailure(
+                                            Exception(
+                                                resource.exception
+                                            )
+                                        )
                                     }
                                 )
                             }

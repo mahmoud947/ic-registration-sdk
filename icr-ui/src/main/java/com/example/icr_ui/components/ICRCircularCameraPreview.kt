@@ -130,6 +130,7 @@ fun ICRCircularCameraPreview(
                                     onFrameCaptured(bitmap)
                                     if (animatedProgress == 100f) {
                                         onSmileDetected(bitmap)
+                                        imageProxy.close()
                                     }
                                 } catch (e: Exception) {
                                     e.printStackTrace()

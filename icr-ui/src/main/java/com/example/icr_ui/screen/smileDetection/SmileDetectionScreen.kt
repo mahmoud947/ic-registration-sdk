@@ -36,8 +36,10 @@ import com.example.icr_core.utils.Margin
 import com.example.icr_domain.R
 import com.example.icr_ui.components.ICRBottomSheet
 import com.example.icr_ui.components.ICRCircularCameraPreview
+import com.example.icr_ui.components.ICRFlatButton
 import com.example.icr_ui.components.ICRLottiAnimation
 import com.example.icr_ui.components.ICRText
+import com.example.icr_ui.theme.large
 import com.example.icr_ui.theme.medium
 import com.example.icr_ui.utils.toResult
 import kotlinx.coroutines.flow.Flow
@@ -128,11 +130,19 @@ fun SmileDetectionScreen(
             ) { bitmap ->
                 onEvent(SmileDetectionContract.Event.OnStartSmileDetection(bitmap))
             }
-            Margin(medium)
+            Margin(large)
             uiState.screenMessage?.let {
                 Margin(medium)
                 ICRText(text = stringResource(id = it), style = MaterialTheme.typography.bodyLarge)
             }
+            Margin(large)
+            ICRFlatButton(
+                modifier = Modifier.fillMaxWidth(),
+                text = stringResource(R.string.cancel),
+                onClick = {
+                    onEvent(SmileDetectionContract.Event.OnCancel)
+                }
+            )
 
             if (isBottomSheetOpen) {
                 ICRBottomSheet(
@@ -165,7 +175,6 @@ fun SmileDetectionScreen(
         }
 
     }
-
 
 }
 

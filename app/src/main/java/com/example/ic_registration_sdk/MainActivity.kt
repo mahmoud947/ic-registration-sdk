@@ -48,6 +48,14 @@ class MainActivity : ComponentActivity() {
                                     ).show()
                                 }
 
+                                override fun onCancelByTheUser() {
+                                    Toast.makeText(
+                                        this@MainActivity,
+                                        "Sdk onCancelByTheUser",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
+
                             })
                         }) {
                             Text(text = "Insert User")
