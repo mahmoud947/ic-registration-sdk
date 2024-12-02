@@ -19,28 +19,26 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import com.example.ic_registration_sdk.ui.theme.IcregistrationsdkTheme
-import com.example.icr_sdk.*
-import com.example.icr_sdk.module.ICRSdkResult
-import com.example.icr_sdk.utils.ICRLanguage
-import com.example.icr_sdk.utils.ICRSDKListener
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
+import com.example.ic_registration_sdk.ui.theme.IcregistrationsdkTheme
+import com.example.icr_sdk.*
+import com.example.icr_sdk.module.ICRSdkResult
+import com.example.icr_sdk.utils.ICRLanguage
+import com.example.icr_sdk.utils.ICRSDKListener
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
