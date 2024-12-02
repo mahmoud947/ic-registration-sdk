@@ -12,6 +12,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import com.example.ic_registration_sdk.ui.theme.IcregistrationsdkTheme
 import com.example.icr_sdk.*
 import com.example.icr_sdk.module.ICRSdkResult
@@ -24,6 +25,13 @@ class MainActivity : ComponentActivity() {
         val icrsdk = ICRSDK
             .Builder()
             .setLanguage(ICRLanguage.ARABIC)
+            .setDarkMode(false)
+            .setLightThemeColors(
+                lightPrimary = Color.Red,
+                lightSecondary = Color.Green,
+                lightTertiary = Color.DarkGray,
+                lightBackground = Color.White
+            )
             .context(this.applicationContext).build()
         enableEdgeToEdge()
         setContent {

@@ -9,17 +9,20 @@ import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
+import com.example.icr_core.listner.ICRSDKManager
 
 private val DarkColorScheme = darkColorScheme(
-    primary = Purple80,
-    secondary = PurpleGrey80,
-    tertiary = Pink80
+    primary =ICRSDKManager.primary ?: Purple80,
+    secondary =ICRSDKManager.secondary ?: PurpleGrey80,
+    tertiary =ICRSDKManager.tertiary ?: Pink80,
+    background =ICRSDKManager.background ?: PurpleGrey80
 )
 
 private val LightColorScheme = lightColorScheme(
-    primary = Purple40,
-    secondary = PurpleGrey40,
-    tertiary = Pink40
+    primary = ICRSDKManager.lightPrimary ?: Purple40,
+    secondary = ICRSDKManager.lightSecondary ?: PurpleGrey40,
+    tertiary =ICRSDKManager.lightTertiary ?: Pink80,
+    background = ICRSDKManager.lightBackground ?: PurpleGrey40
 
     /* Other default colors to override
     background = Color(0xFFFFFBFE),
@@ -34,9 +37,9 @@ private val LightColorScheme = lightColorScheme(
 
 @Composable
 fun IcregistrationsdkTheme(
-    darkTheme: Boolean = isSystemInDarkTheme(),
+    darkTheme: Boolean = ICRSDKManager.isDarkMode ?: isSystemInDarkTheme(),
     // Dynamic color is available on Android 12+
-    dynamicColor: Boolean = true,
+    dynamicColor: Boolean = false,
     content: @Composable () -> Unit
 ) {
     val colorScheme = when {
