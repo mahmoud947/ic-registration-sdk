@@ -1,9 +1,9 @@
 name: Trigger Build on Commit and Use Last Tag
 
 on:
-  push: # Trigger on every push to any branch
+  push:
     branches:
-      - 'master'
+      - '**'
 
 jobs:
   build-and-push:
@@ -39,7 +39,6 @@ jobs:
     - name: Get Latest Tag
       id: get_latest_tag
       run: |
-        # Fetch all tags and sort by version, then get the latest one
         git fetch --tags
         LATEST_TAG=$(git tag --sort=-v:refname | head -n 1)
         if [ -z "$LATEST_TAG" ]; then
@@ -49,9 +48,24 @@ jobs:
         echo "Latest tag: $LATEST_TAG"
         echo "latest_tag=$LATEST_TAG" >> $GITHUB_ENV
 
-    # Step 6: Create GitHub Release (Optional)
+    # Step 6: Check if Release Exists
+    - name: Check Release
+      id: check_release
+      run: |
+        RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" \
+          -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+          -H "Accept: application/vnd.github+json" \
+          https://api.github.com/repos/${{ github.repository }}/releases/tags/${{ env.latest_tag }})
+        if [ "$RESPONSE" -eq 200 ]; then
+          echo "Release already exists for tag ${{ env.latest_tag }}."
+          echo "release_exists=true" >> $GITHUB_ENV
+        else
+          echo "No release found for tag ${{ env.latest_tag }}."
+          echo "release_exists=false" >> $GITHUB_ENV
+
+    # Step 7: Create GitHub Release (Only if Release Doesn't Exist)
     - name: Create GitHub Release
-      if: startsWith(env.latest_tag, 'v') && env.latest_tag != 'v0.0.0'
+      if: env.release_exists == 'false'
       uses: actions/create-release@v1
       with:
         tag_name: ${{ env.latest_tag }}
@@ -62,7 +76,7 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-    # Step 7: Trigger Build on JitPack (or other build step)
+    # Step 8: Trigger Build on JitPack (or other build step)
     - name: Trigger Build
       run: |
         echo "Build triggered using latest tag: ${{ env.latest_tag }}"
