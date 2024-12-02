@@ -1,9 +1,9 @@
-name: Trigger Build on Manual Tagging
+name: Trigger Build on Commit and Use Last Tag
 
 on:
-  push:
-    tags:
-      - 'v*' # Trigger only when a tag starting with 'v' is pushed
+  push: # Trigger on every push to any branch
+    branches:
+      - 'master'
 
 jobs:
   build-and-push:
@@ -33,31 +33,28 @@ jobs:
         git config user.name "Mahmoud"
         git config user.email "mahmoudkamal4673@gmail.com"
 
-    # Step 5: Get the Current Tag
-    - name: Get Current Tag
-      id: get_tag
+    # Step 5: Get the Last Tag
+    - name: Get Last Tag
+      id: get_last_tag
       run: |
-        CURRENT_TAG=$(git tag --points-at HEAD)
-        if [ -z "$CURRENT_TAG" ]; then
-          echo "No tag found for this commit."
-          exit 1
-        fi
-        echo "Current tag: $CURRENT_TAG"
-        echo "tag=$CURRENT_TAG" >> $GITHUB_ENV
+        LAST_TAG=$(git describe --tags --abbrev=0 || echo "v0.0.0")
+        echo "Last tag: $LAST_TAG"
+        echo "last_tag=$LAST_TAG" >> $GITHUB_ENV
 
-    # Step 6: Create GitHub Release
+    # Step 6: Create GitHub Release (Optional)
     - name: Create GitHub Release
+      if: startsWith(env.last_tag, 'v')
       uses: actions/create-release@v1
       with:
-        tag_name: ${{ env.tag }}
-        release_name: "Release ${{ env.tag }}"
-        body: "This is an automatic release for version ${{ env.tag }}."
+        tag_name: ${{ env.last_tag }}
+        release_name: "Release ${{ env.last_tag }}"
+        body: "This is an automatic release for the last tag: ${{ env.last_tag }}."
         draft: false
         prerelease: false
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-    # Step 7: Trigger Build on JitPack
-    - name: Trigger Build on JitPack
+    # Step 7: Trigger Build on JitPack (or other build step)
+    - name: Trigger Build
       run: |
-        echo "Build triggered for tag: ${{ env.tag }}"
+        echo "Build triggered using last tag: ${{ env.last_tag }}"
