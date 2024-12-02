@@ -20,6 +20,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -34,6 +35,8 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import coil.compose.AsyncImage
 import com.example.icr_core.utils.resize
 import java.util.concurrent.Executors
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 
 @SuppressLint("RestrictedApi")
 @Composable
@@ -49,6 +52,7 @@ fun ICRCircularCameraPreview(
     val lifecycleOwner = LocalLifecycleOwner.current
     val cameraProviderFuture = remember { ProcessCameraProvider.getInstance(context) }
     val executor = Executors.newSingleThreadExecutor()
+    var isSmileDetected by remember { mutableStateOf(false) }
 
     Box(
         contentAlignment = Alignment.Center,
@@ -128,7 +132,8 @@ fun ICRCircularCameraPreview(
                                     val bitmap =
                                         imageProxy.toBitmap().resize(320, 240)
                                     onFrameCaptured(bitmap)
-                                    if (animatedProgress == 100f) {
+                                    if (animatedProgress == 100f && !isSmileDetected) {
+                                        isSmileDetected = true
                                         onSmileDetected(bitmap)
                                         imageProxy.close()
                                     }
