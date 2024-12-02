@@ -1,20 +1,18 @@
-name: Trigger Build on Commit and Use Last Tag
+name: Trigger Build on Tag Push
 
 on:
   push:
-    branches:
-      - '**'
+    tags:
+      - '**' # Trigger on all tag pushes
 
 jobs:
-  build-and-push:
+  build-and-release:
     runs-on: ubuntu-latest
 
     steps:
     # Step 1: Checkout the repository
     - name: Checkout Repository
       uses: actions/checkout@v3
-      with:
-        fetch-depth: 0 # Ensure all tags are fetched
 
     # Step 2: Set up Java 17
     - name: Set up Java 17
@@ -35,48 +33,27 @@ jobs:
         git config user.name "Mahmoud"
         git config user.email "mahmoudkamal4673@gmail.com"
 
-    # Step 5: Get the Latest Tag
-    - name: Get Latest Tag
-      id: get_latest_tag
+    # Step 5: Extract Tag Name
+    - name: Get Tag Name
+      id: get_tag
       run: |
-        git fetch --tags
-        LATEST_TAG=$(git tag --sort=-v:refname | head -n 1)
-        if [ -z "$LATEST_TAG" ]; then
-          echo "No tags found. Defaulting to v0.0.0"
-          LATEST_TAG="v0.0.0"
-        fi
-        echo "Latest tag: $LATEST_TAG"
-        echo "latest_tag=$LATEST_TAG" >> $GITHUB_ENV
+        TAG_NAME=${GITHUB_REF##*/}
+        echo "Tag Name: $TAG_NAME"
+        echo "tag_name=$TAG_NAME" >> $GITHUB_ENV
 
-    # Step 6: Check if Release Exists
-    - name: Check Release
-      id: check_release
-      run: |
-        RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" \
-          -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-          -H "Accept: application/vnd.github+json" \
-          https://api.github.com/repos/${{ github.repository }}/releases/tags/${{ env.latest_tag }})
-        if [ "$RESPONSE" -eq 200 ]; then
-          echo "Release already exists for tag ${{ env.latest_tag }}."
-          echo "release_exists=true" >> $GITHUB_ENV
-        else
-          echo "No release found for tag ${{ env.latest_tag }}."
-          echo "release_exists=false" >> $GITHUB_ENV
-
-    # Step 7: Create GitHub Release (Only if Release Doesn't Exist)
+    # Step 6: Create GitHub Release
     - name: Create GitHub Release
-      if: env.release_exists == 'false'
       uses: actions/create-release@v1
       with:
-        tag_name: ${{ env.latest_tag }}
-        release_name: "Release ${{ env.latest_tag }}"
-        body: "This is an automatic release for the latest tag: ${{ env.latest_tag }}."
+        tag_name: ${{ env.tag_name }}
+        release_name: "Release ${{ env.tag_name }}"
+        body: "This is an automatic release for the tag: ${{ env.tag_name }}."
         draft: false
         prerelease: false
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-    # Step 8: Trigger Build on JitPack (or other build step)
+    # Step 7: Trigger Build on JitPack (or other build step)
     - name: Trigger Build
       run: |
-        echo "Build triggered using latest tag: ${{ env.latest_tag }}"
+        echo "Build triggered using tag: ${{ env.tag_name }}"
