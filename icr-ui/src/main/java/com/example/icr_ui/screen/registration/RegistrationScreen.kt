@@ -74,7 +74,11 @@ fun RegistrationScreen(
 
             }
             is RegistrationContract.SideEffect.NavigateToNextScreen->{
-                navController.navigate(ICRScreen.SmileDetection.createRoute(effect.userId))
+                navController.navigate(ICRScreen.SmileDetection.createRoute(effect.userId)){
+                    popUpTo(ICRScreen.Registration.route){
+                        inclusive = true
+                    }
+                }
             }
         }
     }
@@ -90,12 +94,12 @@ fun RegistrationScreen(
             horizontalAlignment = Alignment.Start,
         ) {
             ICRText(
-                text = "Registration",
+                text = stringResource(R.string.registration),
                 style = MaterialTheme.typography.headlineLarge.copy(fontWeight = FontWeight.Bold)
             )
             Margin(large)
             ICRText(
-                text = "Enter your details to set up your account.",
+                text = stringResource(R.string.enter_details_to_setup),
                 style = MaterialTheme.typography.bodyMedium
             )
             Margin(extraLarge)
@@ -103,7 +107,7 @@ fun RegistrationScreen(
                 modifier = Modifier.fillMaxWidth(),
                 value = uiState.username,
                 onValueChange = { onEvent(RegistrationContract.Event.OnUsernameChange(it)) },
-                placeholder = "Username",
+                placeholder = stringResource(R.string.username),
                 isError = uiState.usernameResErrorId != null,
                 supportingText = uiState.usernameResErrorId?.let { resMessageId ->
                     {
@@ -120,7 +124,7 @@ fun RegistrationScreen(
                 modifier = Modifier.fillMaxWidth(),
                 value = uiState.phoneNumber,
                 onValueChange = { onEvent(RegistrationContract.Event.OnPhoneNumberChange(it)) },
-                placeholder = "Phone Number",
+                placeholder = stringResource(R.string.phone_number),
                 isError = uiState.phoneNumberResErrorId != null,
                 supportingText = uiState.phoneNumberResErrorId?.let { resMessageId ->
                     {
@@ -138,7 +142,7 @@ fun RegistrationScreen(
                 modifier = Modifier.fillMaxWidth(),
                 value = uiState.email,
                 onValueChange = { onEvent(RegistrationContract.Event.OnEmailChange(it)) },
-                placeholder = "Email",
+                placeholder = stringResource(R.string.email),
                 isError = uiState.emailResErrorId != null,
                 supportingText = uiState.emailResErrorId?.let { resMessageId ->
                     {
@@ -156,7 +160,7 @@ fun RegistrationScreen(
                 modifier = Modifier.fillMaxWidth(),
                 value = uiState.password,
                 onValueChange = { onEvent(RegistrationContract.Event.OnPasswordChange(it)) },
-                placeholder = "Password",
+                placeholder = stringResource(R.string.password),
                 isError = uiState.passwordResErrorId != null,
                 supportingText = uiState.passwordResErrorId?.let { resMessageId ->
                     {
@@ -174,7 +178,7 @@ fun RegistrationScreen(
                 modifier = Modifier.fillMaxWidth(),
                 value = uiState.confirmPassword,
                 onValueChange = { onEvent(RegistrationContract.Event.OnConfirmPasswordChange(it)) },
-                placeholder = "Confirm Password",
+                placeholder = stringResource(R.string.confirm_password),
                 isError = uiState.confirmPasswordResErrorId != null,
                 supportingText = uiState.confirmPasswordResErrorId?.let { resMessageId ->
                     {
@@ -191,7 +195,7 @@ fun RegistrationScreen(
             ICRFlatButton(
                 modifier = Modifier
                     .fillMaxWidth(),
-                text = "Next",
+                text = stringResource(R.string.next),
                 isLoading = uiState.loading,
                 onClick = { onEvent(RegistrationContract.Event.OnNextClick) }
             )

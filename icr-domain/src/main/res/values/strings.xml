@@ -15,4 +15,18 @@
     <string name="successfully">Success!</string>
     <string name="cancel">Cancel</string>
 
+    <string name="confirm_exit_title">Cancel Validation</string>
+    <string name="confirm_exit_message">Are you sure you want to cancel the validation process?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+
+    <string name="registration">Registration</string>
+    <string name="enter_details_to_setup">Enter your details to set up your account.</string>
+    <string name="username">Username</string>
+    <string name="phone_number">Phone Number</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="next">Next</string>
+
 </resources>

@@ -14,4 +14,17 @@
     <string name="authentication_success_message">تم التحقق بنجاح! مرحبًا بك معنا! 🎉</string>
     <string name="successfully">تم بنجاح!</string>
     <string name="cancel">الغاء</string>
+    <string name="confirm_exit_title">إلغاء التحقق</string>
+    <string name="confirm_exit_message">هل أنت متأكد أنك تريد إلغاء عملية التحقق؟</string>
+    <string name="yes">نعم</string>
+    <string name="no">لا</string>
+
+    <string name="registration">تسجيل</string>
+    <string name="enter_details_to_setup">أدخل بياناتك لإعداد حسابك.</string>
+    <string name="username">اسم المستخدم</string>
+    <string name="phone_number">رقم الهاتف</string>
+    <string name="email">البريد الإلكتروني</string>
+    <string name="password">كلمة المرور</string>
+    <string name="confirm_password">تأكيد كلمة المرور</string>
+    <string name="next">التالي</string>
 </resources>

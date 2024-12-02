@@ -3,6 +3,7 @@ package com.example.icr_ui.screen.smileDetection
 import android.Manifest
 import android.content.pm.PackageManager
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
@@ -11,9 +12,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -57,6 +60,7 @@ fun SmileDetectionScreen(
 ) {
     val context = LocalContext.current
     var showCamera by remember { mutableStateOf(false) }
+    var isDialogVisible by remember { mutableStateOf(false) }
 
     var isBottomSheetOpen by remember { mutableStateOf(false) }
     val scope = rememberCoroutineScope()
@@ -80,6 +84,10 @@ fun SmileDetectionScreen(
     }
     LaunchedEffect(Unit) {
         onEvent(SmileDetectionContract.Event.OnSetUserId(userId))
+    }
+
+    BackHandler {
+        isDialogVisible = true
     }
 
     sideEffect.OnEffect { effect ->
@@ -106,11 +114,9 @@ fun SmileDetectionScreen(
                 (context as? ComponentActivity)?.finish()
             }
         }
-
     }
 
     Scaffold { innerPadding ->
-
         Column(
             modifier = modifier
                 .fillMaxSize()
@@ -173,8 +179,29 @@ fun SmileDetectionScreen(
                 )
             }
         }
-
     }
 
+    if (isDialogVisible) {
+        AlertDialog(
+            onDismissRequest = { isDialogVisible = false },
+            title = { ICRText(text = stringResource(R.string.confirm_exit_title)) },
+            text = { ICRText(text = stringResource(R.string.confirm_exit_message)) },
+            confirmButton = {
+                ICRFlatButton(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = stringResource(R.string.yes),
+                    onClick = {
+                        isDialogVisible = false
+                        onEvent(SmileDetectionContract.Event.OnCancel)
+                    })
+            },
+            dismissButton = {
+                ICRFlatButton(
+                    modifier = Modifier.fillMaxWidth(),
+                    onClick = { isDialogVisible = false },
+                    text = stringResource(R.string.no)
+                )
+            }
+        )
+    }
 }
-
