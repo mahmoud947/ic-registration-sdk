@@ -135,7 +135,6 @@ fun ICRCircularCameraPreview(
                                 } catch (e: Exception) {
                                     e.printStackTrace()
                                 } finally {
-
                                     imageProxy.close()
                                 }
                             }
