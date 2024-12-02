@@ -3,7 +3,7 @@ name: Push to JitPack
 on:
   push:
     branches:
-      - main # Trigger on pushes to the main branch
+      - master # Trigger on pushes to the main branch
   workflow_dispatch: # Allow manual triggering of the workflow
 
 jobs:
