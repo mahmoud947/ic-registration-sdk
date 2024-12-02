@@ -43,10 +43,17 @@ This modular approach ensures:
 
 ## Installation
 
-To integrate the SDK, add the following to your `build.gradle` file:
+To integrate the SDK, you need to add the following Maven repositories to your build.gradle file at the project level:
+```gradle
+repositories {
+    mavenCentral()
+    maven("https://jitpack.io")
+}
+```
+Then, add the SDK dependency to the module-level build.gradle file:
 
 ```gradle
-implementation 'com.github.mahmoud947:ic-registration-sdk:1.6.0alpha'
+implementation 'com.github.mahmoud947.ic-registration-sdk:icr-sdk:last_version'
 ```
 
 ---
