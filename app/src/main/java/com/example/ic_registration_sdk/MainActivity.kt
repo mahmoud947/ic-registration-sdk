@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import com.example.ic_registration_sdk.ui.theme.IcregistrationsdkTheme
 import com.example.icr_sdk.*
 import com.example.icr_sdk.module.ICRSdkResult
+import com.example.icr_sdk.utils.ICRLanguage
 import com.example.icr_sdk.utils.ICRSDKListener
 
 class MainActivity : ComponentActivity() {
@@ -22,6 +23,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         val icrsdk = ICRSDK
             .Builder()
+            .setLanguage(ICRLanguage.ARABIC)
             .context(this.applicationContext).build()
         enableEdgeToEdge()
         setContent {

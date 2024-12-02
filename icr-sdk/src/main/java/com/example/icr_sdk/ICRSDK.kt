@@ -8,6 +8,7 @@ import com.example.icr_core.listner.ICRSDKCoreListener
 import com.example.icr_core.listner.ICRSDKManager
 import com.example.icr_sdk.module.ICRSdkResult
 import com.example.icr_sdk.ui.ICRActivity
+import com.example.icr_sdk.utils.ICRLanguage
 import com.example.icr_sdk.utils.ICRSDKListener
 
 
@@ -41,16 +42,19 @@ class ICRSDK private constructor() {
 
     class Builder {
         private lateinit var context: Context
-        private var language: Language? = null
+        private var language: ICRLanguage? = null
 
         fun context(context: Context): Builder {
             this.context = context
             return this
         }
 
-        fun setLanguage(language: Language): Builder {
+        fun setLanguage(language: ICRLanguage): Builder {
             this.language = language
-            ICRSDKManager.language = language
+            ICRSDKManager.language = when (language) {
+                ICRLanguage.ENGLISH -> Language.ENGLISH
+                ICRLanguage.ARABIC -> Language.ARABIC
+            }
             return this
         }
 
