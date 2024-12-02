@@ -13,6 +13,8 @@ jobs:
     # Step 1: Checkout the repository
     - name: Checkout Repository
       uses: actions/checkout@v3
+      with:
+        fetch-depth: 0 # Ensure all tags are fetched
 
     # Step 2: Set up Java 17
     - name: Set up Java 17
@@ -33,22 +35,28 @@ jobs:
         git config user.name "Mahmoud"
         git config user.email "mahmoudkamal4673@gmail.com"
 
-    # Step 5: Get the Last Tag
-    - name: Get Last Tag
-      id: get_last_tag
+    # Step 5: Get the Latest Tag
+    - name: Get Latest Tag
+      id: get_latest_tag
       run: |
-        LAST_TAG=$(git describe --tags --abbrev=0 || echo "v0.0.0")
-        echo "Last tag: $LAST_TAG"
-        echo "last_tag=$LAST_TAG" >> $GITHUB_ENV
+        # Fetch all tags and sort by version, then get the latest one
+        git fetch --tags
+        LATEST_TAG=$(git tag --sort=-v:refname | head -n 1)
+        if [ -z "$LATEST_TAG" ]; then
+          echo "No tags found. Defaulting to v0.0.0"
+          LATEST_TAG="v0.0.0"
+        fi
+        echo "Latest tag: $LATEST_TAG"
+        echo "latest_tag=$LATEST_TAG" >> $GITHUB_ENV
 
     # Step 6: Create GitHub Release (Optional)
     - name: Create GitHub Release
-      if: startsWith(env.last_tag, 'v')
+      if: startsWith(env.latest_tag, 'v') && env.latest_tag != 'v0.0.0'
       uses: actions/create-release@v1
       with:
-        tag_name: ${{ env.last_tag }}
-        release_name: "Release ${{ env.last_tag }}"
-        body: "This is an automatic release for the last tag: ${{ env.last_tag }}."
+        tag_name: ${{ env.latest_tag }}
+        release_name: "Release ${{ env.latest_tag }}"
+        body: "This is an automatic release for the latest tag: ${{ env.latest_tag }}."
         draft: false
         prerelease: false
       env:
@@ -57,4 +65,4 @@ jobs:
     # Step 7: Trigger Build on JitPack (or other build step)
     - name: Trigger Build
       run: |
-        echo "Build triggered using last tag: ${{ env.last_tag }}"
+        echo "Build triggered using latest tag: ${{ env.latest_tag }}"
